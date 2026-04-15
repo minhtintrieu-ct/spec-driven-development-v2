@@ -48,6 +48,9 @@ Return:
 - Keep the template structure.
 - Fill metadata from Jira, PRD, and shared knowledge results.
 - Keep only contract-relevant findings in `api-contract.md`.
+- End the artifact with a Mermaid `flowchart TD` service-flow diagram.
+- Use one node per client surface or backend service.
+- Inside each node, list existing APIs, new APIs, and follow-up APIs when relevant.
 - If backend support is clearly needed but not confirmed, default to `New endpoint required`.
 - If the need itself is unclear, use `Pending decision`.
 - Use `Confirmed reuse` only when a concrete existing binding is found.

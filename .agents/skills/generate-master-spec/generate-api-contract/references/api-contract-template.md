@@ -218,3 +218,38 @@ If the event is `Reuse existing`:
 | Item | Why It Needs A Decision | Linked Question |
 |------|--------------------------|-----------------|
 |  |  | OQ-00X |
+
+## 8. Service Flow Diagram
+
+Render a Mermaid diagram that shows the client-to-backend flow for this package baseline.
+
+Use `flowchart TD`.
+
+Rules:
+
+- each node represents one service or client surface
+- include both current and new API surfaces when relevant
+- inside each node, list:
+  - confirmed existing APIs
+  - new APIs or endpoints required
+  - follow-up APIs or bindings that still need confirmation
+- keep labels short and reviewable
+- use the contract statuses to decide how to label each API:
+  - `Confirmed reuse`
+  - `New endpoint required`
+  - `Pending decision`
+- if ownership is still unclear, mark it inline as `Follow-up`
+
+Suggested shape:
+
+```mermaid
+flowchart TD
+    Client["Client / Entry Point<br/>- Existing: ...<br/>- New: ..."]
+    Gateway["Service A<br/>- Existing: ...<br/>- New: ...<br/>- Follow-up: ..."]
+    Logic["Service B<br/>- Existing: ..."]
+    Core["Service C<br/>- Existing: ..."]
+
+    Client --> Gateway
+    Gateway --> Logic
+    Logic --> Core
+```

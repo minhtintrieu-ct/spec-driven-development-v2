@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generate Master Spec Doc"
+  short_description: "Draft concise master-spec hub"
+  default_prompt: "Use $generate-master-spec-doc to draft features/<JIRA_ID>/master-spec.md from the Jira temp files plus knowledge, open questions, and api contract artifacts."

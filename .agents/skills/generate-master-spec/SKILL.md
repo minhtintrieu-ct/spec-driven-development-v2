@@ -12,8 +12,9 @@ Run the package generation flow.
 1. Require a Jira ID.
 2. Run phases in order:
    - `enrich-knowledge`
-   <!-- - `generate-open-questions`
-   - `generate-api-contract` -->
+   - `generate-open-questions`
+   - `generate-api-contract`
+   - `generate-master-spec-doc`
 3. Stop at the first phase that returns `result: stop`.
 4. Return a short status report.
 
@@ -23,7 +24,7 @@ Return:
 
 ```md
 - master-spec: in-progress
-- step: enrich-knowledge -> generate-open-questions -> generate-api-contract
+- step: enrich-knowledge -> generate-open-questions -> generate-api-contract -> generate-master-spec-doc
 - result: continue
 ```
 

@@ -53,10 +53,24 @@ Keep only the fields needed by later steps:
 - `reporter`
 - `descriptionMarkdown`
 - `comments`
+- `issueLinks`
 - `remoteLinks`
 - `extractedLinks`
 
 `descriptionMarkdown` is the canonical PRD link source for the next step.
+
+Normalize `issueLinks` into a compact list that still preserves stakeholder routing data for later steps.
+
+Keep these fields for each linked issue when available:
+
+- `linkType`
+- `direction`
+- `issueKey`
+- `issueUrl`
+- `summary`
+- `issueType`
+- `status`
+- `assignee`
 
 ## Guardrails
 
@@ -65,3 +79,4 @@ Keep only the fields needed by later steps:
 - Keep `temp/` out of git.
 - Do not write into `features/` in this step.
 - Preserve `descriptionMarkdown` as-is because the PRD link is expected to live there.
+- Keep `issueLinks` compact and normalized. Do not dump the raw Jira payload.

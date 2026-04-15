@@ -1,0 +1,4 @@
+interface:
+  display_name: "Finalize Master Spec"
+  short_description: "Optionally create the sprint PR"
+  default_prompt: "Use $finalize-master-spec to ask whether a finished package should create a PR into spec/<YY.WW>, then branch from that sprint branch and open the PR from feat/<JIRA_ID>."
