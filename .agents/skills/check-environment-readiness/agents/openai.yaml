@@ -1,0 +1,4 @@
+interface:
+  display_name: "Check Environment Readiness"
+  short_description: "Validate Node, plugins, MCP, and auth"
+  default_prompt: "Use $check-environment-readiness to verify Node, Atlassian, GitHub, and Knowledge Hub availability and authentication before story intake."

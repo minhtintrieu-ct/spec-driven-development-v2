@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fetch Jira Issue"
+  short_description: "Fetch a Jira issue into temp storage"
+  default_prompt: "Use $fetch-jira-issue to fetch a Jira issue through Atlassian and save the normalized result into temp storage by ticket ID."

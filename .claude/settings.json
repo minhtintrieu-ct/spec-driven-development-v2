@@ -1,0 +1,9 @@
+{
+  "enabledMcpjsonServers": [
+    "chotot-knowledge"
+  ],
+  "enabledPlugins": {
+    "atlassian@claude-plugins-official": true,
+    "figma@claude-plugins-official": true
+  }
+}

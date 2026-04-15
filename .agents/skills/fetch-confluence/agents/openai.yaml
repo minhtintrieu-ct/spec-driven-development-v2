@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fetch Confluence"
+  short_description: "Fetch PRD content into temp storage"
+  default_prompt: "Use $fetch-confluence to detect a Confluence PRD link from the Jira issue temp file and save the PRD markdown into temp storage by Jira ID."

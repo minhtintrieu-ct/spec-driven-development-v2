@@ -1,0 +1,4 @@
+interface:
+  display_name: "Print Hello"
+  short_description: "Minimal hello skill for smoke tests"
+  default_prompt: "Use $print-hello to do a minimal skill smoke test by printing a short hello message."

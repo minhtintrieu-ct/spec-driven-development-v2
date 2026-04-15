@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "chotot-knowledge": {
+      "type": "http",
+      "url": "https://knowledge-hub.chotot.org/mcp"
+    }
+  }
+}
