@@ -1,0 +1,48 @@
+{
+  "issueKey": "PLMO-1328",
+  "issueUrl": "https://701search.atlassian.net/browse/PLMO-1328",
+  "summary": "Redesign Khách Tab as a Toggle and show Contextual Tooltip",
+  "issueType": "Story",
+  "status": "New",
+  "priority": "High",
+  "assignee": {
+    "displayName": "Minh Tin Trieu",
+    "accountId": "712020:343b69ba-8636-4519-b639-a6b3b3cd5927",
+    "email": "minh.tintrieu@chotot.vn"
+  },
+  "reporter": {
+    "displayName": "Minh Tin Trieu",
+    "accountId": "712020:343b69ba-8636-4519-b639-a6b3b3cd5927",
+    "email": "minh.tintrieu@chotot.vn"
+  },
+  "qaRt": "Pham Thi Ngoc Anh",
+  "qaRtAccountId": "712020:3d3bb213-a26c-4405-904a-89795ef68c59",
+  "qaRtEmail": null,
+  "descriptionMarkdown": "PRD Link: https://701search.atlassian.net/wiki/spaces/PROD/pages/4792254581/PRD+CRM+lead+dashboard+Adoption+Discovery#Redesign-Kh%C3%A1ch-Tab-as-a-Toggle-and-show-Contextual-Tooltip\nFigma Link: https://www.figma.com/design/d0PLCcgixlUoQS2zdrpnkO/Platform-Handoff-%E2%80%A2-2026?node-id=4474-5144&t=FIZsu1yiH8XHPLEY-4",
+  "comments": [
+    {
+      "author": "Minh Tin Trieu",
+      "authorAccountId": "712020:343b69ba-8636-4519-b639-a6b3b3cd5927",
+      "body": "Platform Spec Draft Ready For Review\n\nMarker: Platform Spec PR Handoff | PLMO-1328 | r1 | 5bab510c24\nStory: PLMO-1328 | Package: r1\nPR: https://github.com/carousell/ct-common-platform-specs/pull/17\n\nThe latest draft package is ready for review in the linked PR. Please review the shared package and any remaining open questions in that PR.\n\nPIC: @Minh Tin Trieu\nQA: @Pham Thi Ngoc Anh\nCC: @Vo Ngoc Tin"
+    }
+  ],
+  "issueLinks": [
+    {
+      "linkType": "Parent Child",
+      "direction": "inward",
+      "issueKey": "PLMO-1327",
+      "issueUrl": "https://701search.atlassian.net/browse/PLMO-1327",
+      "summary": "[Testing] Research Spec-Driven Development",
+      "issueType": "Task",
+      "status": "New",
+      "assignee": null,
+      "assigneeAccountId": null,
+      "assigneeEmail": null
+    }
+  ],
+  "remoteLinks": [],
+  "extractedLinks": {
+    "prd": "https://701search.atlassian.net/wiki/spaces/PROD/pages/4792254581/PRD+CRM+lead+dashboard+Adoption+Discovery#Redesign-Kh%C3%A1ch-Tab-as-a-Toggle-and-show-Contextual-Tooltip",
+    "figma": "https://www.figma.com/design/d0PLCcgixlUoQS2zdrpnkO/Platform-Handoff-%E2%80%A2-2026?node-id=4474-5144&t=FIZsu1yiH8XHPLEY-4"
+  }
+}
