@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generate Master Spec"
+  short_description: "Run the master-spec generation flow"
+  default_prompt: "Use $generate-master-spec to run the master-spec generation flow, starting with api-contract generation."

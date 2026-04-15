@@ -30,4 +30,4 @@ Its job is to orchestrate:
 5. Master spec package materialization
 6. Finalization
 
-Step 1 of the command delegates to `.agents/skills/check-environment-readiness/SKILL.md`.
+Step 1 of the command delegates to `.agents/skills/analyze/check-environment-readiness/SKILL.md`.

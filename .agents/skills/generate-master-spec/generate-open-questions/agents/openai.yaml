@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generate Open Questions"
+  short_description: "Draft open questions from Jira and PRD"
+  default_prompt: "Use $generate-open-questions to draft features/<JIRA_ID>/open-questions.md from the Jira temp files and PRD content."

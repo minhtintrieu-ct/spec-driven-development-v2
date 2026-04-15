@@ -1,0 +1,4 @@
+interface:
+  display_name: "Enrich Knowledge"
+  short_description: "Build shared knowledge.md from Knowledge Hub"
+  default_prompt: "Use $enrich-knowledge to query Knowledge Hub in parallel and write a shared features/<JIRA_ID>/knowledge.md before generating open questions or api contract."

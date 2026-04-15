@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generate API Contract"
+  short_description: "Draft api-contract from Jira and PRD"
+  default_prompt: "Use $generate-api-contract to draft features/<JIRA_ID>/api-contract.md from the Jira temp files and PRD content."
