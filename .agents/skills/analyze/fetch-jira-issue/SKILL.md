@@ -13,11 +13,13 @@ Save the result to temp storage and stop if the issue cannot be fetched.
 
 1. Require a Jira URL.
 2. Fetch the issue through Atlassian.
-3. Extract the Jira ID as uppercase, for example `PLMO-1328`.
-4. Create `temp/<JIRA_ID>/`.
-5. Save the normalized issue payload to `temp/<JIRA_ID>/jira-issue.json`.
-6. Return a short status report.
-7. Return `result: stop` if Jira fetch fails or the ticket ID cannot be resolved.
+3. Read the Jira user-picker field `QA [RT]` or its equivalent custom field when present.
+4. Read linked issues and keep their assignee identity when present.
+5. Extract the Jira ID as uppercase, for example `PLMO-1328`.
+6. Create `temp/<JIRA_ID>/`.
+7. Save the normalized issue payload to `temp/<JIRA_ID>/jira-issue.json`.
+8. Return a short status report.
+9. Return `result: stop` if Jira fetch fails or the ticket ID cannot be resolved.
 
 ## Output
 
@@ -51,6 +53,9 @@ Keep only the fields needed by later steps:
 - `priority`
 - `assignee`
 - `reporter`
+- `qaRt`
+- `qaRtAccountId`
+- `qaRtEmail`
 - `descriptionMarkdown`
 - `comments`
 - `issueLinks`
@@ -71,6 +76,10 @@ Keep these fields for each linked issue when available:
 - `issueType`
 - `status`
 - `assignee`
+- `assigneeAccountId`
+- `assigneeEmail`
+
+Keep `qaRt`, `qaRtAccountId`, and `qaRtEmail` when the Jira issue exposes the `QA [RT]` user-picker field or its equivalent.
 
 ## Guardrails
 
@@ -79,4 +88,6 @@ Keep these fields for each linked issue when available:
 - Keep `temp/` out of git.
 - Do not write into `features/` in this step.
 - Preserve `descriptionMarkdown` as-is because the PRD link is expected to live there.
+- Read `QA [RT]` from the actual Jira custom field, not from comment text.
+- Preserve the QA user's account identifier when the Atlassian route exposes it.
 - Keep `issueLinks` compact and normalized. Do not dump the raw Jira payload.
