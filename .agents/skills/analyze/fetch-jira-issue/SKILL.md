@@ -37,7 +37,7 @@ Happy path minimum:
 1. One `Get issue` call for the main story
 2. One `Search with JQL` call for all linked issues
 
-Do not call `List accessible resources` in the happy path when `config.yml` already provides the Jira `cloud_id`.
+When `config.yml` already provides the Jira `cloud_id`, `List accessible resources` is forbidden in this step.
 Do not call field metadata in the happy path when the Jira field ID for `QA [RT]` is already known for this project.
 Do not call `Get issue` more than once for the same story in this step.
 Do not make a follow-up `Get issue` call just to request a different field subset or a larger `expand` value after the first successful main-issue fetch.
@@ -119,6 +119,7 @@ Treat the saved `issueLinks` list as a merged snapshot:
 - Fetch Jira only. Do not fetch PRD here.
 - Read `jira.cloud_id` from root `config.yml` first.
 - Read `jira.qa_rt_field_id` from root `config.yml` first.
+- Treat `config.yml` as the source of truth for Jira connection settings in this step.
 - Write under `temp/<JIRA_ID>/`.
 - Keep `temp/` out of git.
 - Do not write into `features/` in this step.
@@ -128,7 +129,9 @@ Treat the saved `issueLinks` list as a merged snapshot:
 - Preserve account identifiers for the story assignee, QA, and linked issue assignees when the Atlassian route exposes them.
 - Treat `assigneeAccountId`, `qaRtAccountId`, and linked-issue `assigneeAccountId` as opaque identifiers. Store exactly what Atlassian returns.
 - Use exactly one linked-issue JQL search per story intake, not one Jira fetch per linked issue.
-- Use the configured Jira `cloud_id` directly. Do not probe with `List accessible resources` in the happy path.
+- Use the configured Jira `cloud_id` directly.
+- If `jira.cloud_id` exists in `config.yml`, do not call `List accessible resources` at all in this step.
+- Do not probe, rediscover, or verify the Jira cloud ID through Atlassian when `config.yml` already provides it.
 - Do not refetch the same Jira story in this step after the first successful `Get issue` call.
 - Do not make a second or third `Get issue` call for the same story to inspect changelog, transitions, comments, or alternate renderings.
 - Do not call field metadata in the happy path just to rediscover the `QA [RT]` field ID.
