@@ -39,10 +39,12 @@ Do not write client-specific data into `.claude/` or `.cursor/` in this step.
    - `spec_repo.path`: absolute path to this spec repo
    - `user.github_login`: detected GitHub login
    - `user.team_member`: the matched `team.yml` record when present, else `null`
+   - `working_repos`: initialize as an empty mapping when missing
 9. Create the parent directory for `~/.config/platform-spec/platform-spec.yml` if needed.
-10. Write the config file.
-11. Return a short status report.
-12. Return `result: stop` if the repo root cannot be resolved, the required repo files are missing, the GitHub login cannot be detected, or the config file cannot be written.
+10. If the config file already exists, preserve any existing `working_repos` entries while refreshing `spec_repo` and `user`.
+11. Write the config file.
+12. Return a short status report.
+13. Return `result: stop` if the repo root cannot be resolved, the required repo files are missing, the GitHub login cannot be detected, or the config file cannot be written.
 
 ## Global Config Shape
 
@@ -59,6 +61,8 @@ user:
     github: "minhtintrieu-ct"
     role: "fe"
     jira_account_id: "712020:343b69ba-8636-4519-b639-a6b3b3cd5927"
+
+working_repos: {}
 ```
 
 If no `team.yml` match is found:
@@ -70,6 +74,28 @@ spec_repo:
 user:
   github_login: "unknown-user"
   team_member: null
+
+working_repos: {}
+```
+
+After a working repo has been registered through `ship`, the same file may grow like this:
+
+```yml
+spec_repo:
+  path: "/absolute/path/to/ct-platform-spec-v2"
+
+user:
+  github_login: "minhtintrieu-ct"
+  team_member:
+    name: "Tin Trieu Minh"
+    github: "minhtintrieu-ct"
+    role: "fe"
+    jira_account_id: "712020:343b69ba-8636-4519-b639-a6b3b3cd5927"
+
+working_repos:
+  "/absolute/path/to/working-repo":
+    remote_url: "git@github.com:org/repo.git"
+    dev_base_branch: "develop"
 ```
 
 ## Command Sequence
@@ -128,7 +154,8 @@ If onboarding fails:
 - Match `team.yml` by exact `github` username only. Do not infer by display name.
 - Write only one shared config file: `~/.config/platform-spec/platform-spec.yml`.
 - Store the absolute repo path, not a relative path.
-- Keep the written config minimal: `spec_repo.path`, `user.github_login`, and `user.team_member`.
+- Keep the written config deterministic: `spec_repo.path`, `user.github_login`, `user.team_member`, and top-level `working_repos`.
 - Preserve the matched `team_member` record as-is from `team.yml`.
+- Preserve existing `working_repos` entries when refreshing onboarding for the same device.
 - If no team member matches the detected GitHub login, write `team_member: null` and still return success.
 - Do not fetch Jira, Confluence, or GitHub PR data in this step.

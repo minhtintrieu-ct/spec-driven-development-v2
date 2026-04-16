@@ -26,6 +26,11 @@ Device-level shared configuration stays in:
 
 - `~/.config/platform-spec/platform-spec.yml`
 
+This shared file stores both:
+
+- the registered `spec_repo.path` and current user identity
+- per-working-repo registration under `working_repos`, including the reusable `dev_base_branch`
+
 ## Phase 1
 
 The first workflow entrypoint is `/analyze`.
@@ -73,6 +78,8 @@ Current supported input:
 
 `qc` is the only supported platform that runs directly in the spec repo. The other platforms must run in a working repo.
 QC artifacts are written under `TCs/<JIRA_ID>/` in the spec repo.
+
+For every non-`qc` platform, the first `ship` run in a working repo must provide that repo's `dev base branch`. `ship` then reuses the stored value from `~/.config/platform-spec/platform-spec.yml` under `working_repos`.
 
 The web flow preserves the carried web command/template contract from the older platform layer through:
 
