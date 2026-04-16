@@ -12,8 +12,8 @@ Save the result to temp storage and stop if the issue cannot be fetched.
 ## Workflow
 
 1. Require a Jira URL.
-2. Read `jira.cloud_id` from root `config.yml`.
-3. Use that configured cloud ID for all Atlassian Jira calls in this step.
+2. Read `jira.cloud_id` and `jira.qa_rt_field_id` from root `config.yml`.
+3. Use those configured values for all Atlassian Jira calls in this step.
 4. Fetch the main Jira issue through Atlassian exactly once.
 5. Extract the Jira ID as uppercase, for example `PLMO-1328`.
 6. Read the Jira user-picker field `QA [RT]` or its equivalent custom field when present.
@@ -47,7 +47,7 @@ Use this exact request shape as the happy-path target:
 1. Main issue `Get issue`
    - `cloudId`: value from `config.yml`
    - `issueIdOrKey`: resolved Jira key
-   - `fields`: only the minimum fields needed for the normalized payload and linked-issue merge, including the known `QA [RT]` custom field
+   - `fields`: only the minimum fields needed for the normalized payload and linked-issue merge, including the configured `jira.qa_rt_field_id`
    - `expand`: omit unless a concrete downstream need is documented
 2. Linked issues `Search with JQL`
    - `cloudId`: value from `config.yml`
@@ -104,6 +104,9 @@ Keep these fields for each linked issue when available:
 - `assignee`
 - `assigneeAccountId`
 
+Treat every `*AccountId` field in this payload as the raw canonical Atlassian account ID.
+Do not normalize, trim, reformat, or derive a second ID shape in this step.
+
 Keep `qaRt` and `qaRtAccountId` when the Jira issue exposes the `QA [RT]` user-picker field or its equivalent.
 
 Treat the saved `issueLinks` list as a merged snapshot:
@@ -115,18 +118,21 @@ Treat the saved `issueLinks` list as a merged snapshot:
 
 - Fetch Jira only. Do not fetch PRD here.
 - Read `jira.cloud_id` from root `config.yml` first.
+- Read `jira.qa_rt_field_id` from root `config.yml` first.
 - Write under `temp/<JIRA_ID>/`.
 - Keep `temp/` out of git.
 - Do not write into `features/` in this step.
 - Preserve `descriptionMarkdown` as-is because the PRD link is expected to live there.
 - Read `QA [RT]` from the actual Jira custom field, not from comment text.
+- For this workspace, the configured `QA [RT]` field ID is expected to be `customfield_10841` unless the config says otherwise.
 - Preserve account identifiers for the story assignee, QA, and linked issue assignees when the Atlassian route exposes them.
+- Treat `assigneeAccountId`, `qaRtAccountId`, and linked-issue `assigneeAccountId` as opaque identifiers. Store exactly what Atlassian returns.
 - Use exactly one linked-issue JQL search per story intake, not one Jira fetch per linked issue.
 - Use the configured Jira `cloud_id` directly. Do not probe with `List accessible resources` in the happy path.
 - Do not refetch the same Jira story in this step after the first successful `Get issue` call.
 - Do not make a second or third `Get issue` call for the same story to inspect changelog, transitions, comments, or alternate renderings.
 - Do not call field metadata in the happy path just to rediscover the `QA [RT]` field ID.
-- If the Jira field ID for `QA [RT]` is stable for this project, request it directly in the main issue fetch.
+- Request `jira.qa_rt_field_id` directly in the main issue fetch so `qaRt` and `qaRtAccountId` are populated from the first response.
 - Request only the minimum main-issue fields needed for the normalized payload and linked-issue merge.
 - Do not request `transitions`, `changelog`, or broad `expand` values such as `fields,changelog,comments` in the happy path.
 - Do not request `created`, `updated`, `labels`, `priority`, `status`, `reporter`, or other unused story fields in the happy path.
