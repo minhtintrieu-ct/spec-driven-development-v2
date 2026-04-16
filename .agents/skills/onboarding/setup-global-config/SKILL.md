@@ -17,10 +17,11 @@ Use this fixed toolchain in the happy path:
 - `gh` CLI to detect the authenticated GitHub user
 - local repo files `team.yml` and `config.yml` as the source of truth
 
-Write the global config to this exact path:
+Write the shared config to this exact path:
 
 - `~/.config/platform-spec/platform-spec.yml`
 
+Do not publish global skills in this step. That happens in `setup-global-skills`.
 Do not write client-specific data into `.claude/` or `.cursor/` in this step.
 
 ## Workflow

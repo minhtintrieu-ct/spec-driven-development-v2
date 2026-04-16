@@ -1,0 +1,6 @@
+interface:
+  display_name: "Setup Global Skills"
+  short_description: "Publish the global platform shipping skill for Codex, Claude, and Cursor"
+  default_prompt: |
+    Use $setup-global-skills during /onboarding after the shared platform-spec config has been created.
+    Link the repo's ship skill into ~/.codex/skills, ~/.claude/skills, and ~/.cursor/skills without touching client-managed folders.

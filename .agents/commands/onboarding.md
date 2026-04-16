@@ -13,5 +13,6 @@ Run this command from inside the spec repo that should be registered on the curr
 ## Execution
 
 1. Run `.agents/skills/onboarding/setup-global-config/SKILL.md`.
+2. If config setup succeeds, run `.agents/skills/onboarding/setup-global-skills/SKILL.md`.
 
-If the skill returns `result: stop`, stop the flow.
+If either skill returns `result: stop`, stop the flow.

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Ship Web"
+  short_description: "Prepare web implementation from the platform spec package"
+  default_prompt: |
+    Use $ship-web when `ship` is invoked with `platform = web`.
+    Read the carried web platform references first, then prepare the current working repo for implementation with the machine helper instead of hand-authoring the bundle.

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Ship QC"
+  short_description: "Refresh QC manual-quality planning from the approved package"
+  default_prompt: |
+    Use $ship-qc when `ship` is invoked with `platform = qc`.
+    Inherit the shared ship base first, then stay in the spec repo and refresh the QC delta without preparing a working-repo bundle.

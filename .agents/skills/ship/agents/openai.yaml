@@ -1,0 +1,6 @@
+interface:
+  display_name: "Ship"
+  short_description: "Route platform shipping from any repo against the registered spec repo"
+  default_prompt: |
+    Use $ship to prepare implementation from any repo against the registered platform spec repo.
+    Read ~/.config/platform-spec/platform-spec.yml first, resolve spec_repo.path, then route to the selected platform skill under .agents/skills/ship/.

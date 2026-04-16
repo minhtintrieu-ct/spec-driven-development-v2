@@ -32,17 +32,49 @@ The first workflow entrypoint is `/analyze`.
 
 ## Onboarding
 
-Use `/onboarding` to create or refresh the device-level shared config for this spec repo.
+Use `/onboarding` to:
+
+- create or refresh the device-level shared config for this spec repo
+- publish the global `ship` skill for Codex, Claude, and Cursor
 
 `/analyze` expects onboarding to be completed first and will stop if `~/.config/platform-spec/platform-spec.yml` is missing or points to a different repo path.
 
-Its job is to orchestrate:
+`/onboarding` publishes the global skill by linking:
 
-1. Node availability check
-2. Atlassian, GitHub, and Knowledge Hub availability/auth check
-3. Jira issue fetch
-4. PRD link detection and Confluence content fetch
-5. Master spec package materialization
-6. Finalization
+- `<spec-repo>/.agents/skills/ship`
 
-Step 1 of the command delegates to `.agents/skills/analyze/check-environment-readiness/SKILL.md`.
+into:
+
+- `~/.codex/skills/ship`
+- `~/.claude/skills/ship`
+- `~/.cursor/skills/ship`
+
+## Implementation
+
+Use the `ship` skill to prepare implementation from the platform spec package.
+
+Current supported input:
+
+- `platform = web`
+- `platform = android`
+- `platform = ios`
+- `platform = backend`
+- `platform = qc`
+- `platform = qe`
+
+`ship` routes by `platform` and currently delegates:
+
+- `platform = web` to `.agents/skills/ship/web/SKILL.md`
+- `platform = android` to `.agents/skills/ship/android/SKILL.md`
+- `platform = ios` to `.agents/skills/ship/ios/SKILL.md`
+- `platform = backend` to `.agents/skills/ship/backend/SKILL.md`
+- `platform = qc` to `.agents/skills/ship/qc/SKILL.md`
+- `platform = qe` to `.agents/skills/ship/qe/SKILL.md`
+
+`qc` is the only supported platform that runs directly in the spec repo. The other platforms must run in a working repo.
+QC artifacts are written under `TCs/<JIRA_ID>/` in the spec repo.
+
+The web flow preserves the carried web command/template contract from the older platform layer through:
+
+- `.agents/skills/ship/web/references/command.md`
+- `.agents/skills/ship/web/references/template.md`

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Ship Backend"
+  short_description: "Prepare backend implementation from the platform spec package"
+  default_prompt: |
+    Use $ship-backend when `ship` is invoked with `platform = backend`.
+    Inherit the shared ship base first, then prepare the current backend working repo for implementation with the machine helper.

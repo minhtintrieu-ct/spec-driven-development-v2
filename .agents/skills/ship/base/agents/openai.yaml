@@ -1,0 +1,6 @@
+interface:
+  display_name: "Ship Base"
+  short_description: "Shared baseline for all ship platform skills"
+  default_prompt: |
+    Use $ship-base only as the shared baseline for ship platform skills.
+    Apply its common preflight, repo-role classification, and stop conditions before any platform-specific shipping logic.
