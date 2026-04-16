@@ -22,9 +22,19 @@ Shared workflow configuration stays in:
 
 - `config.yml`
 
+Device-level shared configuration stays in:
+
+- `~/.config/platform-spec/platform-spec.yml`
+
 ## Phase 1
 
 The first workflow entrypoint is `/analyze`.
+
+## Onboarding
+
+Use `/onboarding` to create or refresh the device-level shared config for this spec repo.
+
+`/analyze` expects onboarding to be completed first and will stop if `~/.config/platform-spec/platform-spec.yml` is missing or points to a different repo path.
 
 Its job is to orchestrate:
 

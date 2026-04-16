@@ -1,0 +1,4 @@
+interface:
+  display_name: "Setup Global Config"
+  short_description: "Create shared device config for spec workflows"
+  default_prompt: "Use $setup-global-config to create the shared device-level platform-spec.yml config for this spec workflow and map the current GitHub user to team.yml."
