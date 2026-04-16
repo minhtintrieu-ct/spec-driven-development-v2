@@ -6,6 +6,7 @@ AI-native platform spec workflow.
 
 - `.agents/commands` is the canonical command layer.
 - `.agents/skills` is the canonical skill layer.
+- `config.yml` is the canonical shared workflow config.
 - `.claude/commands` and `.claude/skills` should point to `.agents`.
 - `.cursor/commands` and `.cursor/skills` should point to `.agents`.
 
@@ -16,6 +17,10 @@ Client-specific configuration stays in:
 - `.cursor/settings.json`
 - `.cursor/mcp.json`
 - `.mcp.json`
+
+Shared workflow configuration stays in:
+
+- `config.yml`
 
 ## Phase 1
 

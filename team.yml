@@ -1,0 +1,8 @@
+# CT Team Registry
+
+team:
+  # Web Engineers
+  - name: "Tin Trieu Minh"
+    github: "minhtintrieu-ct"
+    role: fe
+    jira_account_id: "627cdcaef29dcb0068f96a14"

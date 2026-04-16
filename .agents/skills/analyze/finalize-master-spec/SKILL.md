@@ -46,12 +46,20 @@ Keep this step focused on the user decision, git branching, PR creation, and Jir
    - a short review request
    - the created PR link
 19. Resolve Jira mention recipients from `temp/<JIRA_ID>/jira-issue.json`:
+   - `PIC` from the root story assignee
    - `QA` from `qaRt`
-   - `CC` from assignees of linked issues whose `linkType` is `task link`
+   - `CC` from stakeholders resolved from `issueLinks`
+20. Filter stakeholder recipients from `issueLinks`:
+   - keep only snapshot `issueLinks` whose `linkType` is `task link`
+   - use the saved linked issue assignee account IDs and display names from the merged snapshot
    - dedupe recipients by account ID
-20. Post exactly one Jira comment on the root story with real Jira mentions when account IDs are available.
-21. Return a short status report.
-22. Return `result: stop` if the sprint format is invalid, the target branch is missing, the checkout or pull fails, the feature branch cannot be created, the PR creation fails, or the Jira comment cannot be posted.
+21. Build the mention tail in this order:
+   - `PIC`
+   - `QA`
+   - `CC`
+22. Post exactly one Jira comment on the root story using Jira Cloud ADF mention nodes, not plain-text `@name`.
+23. Return a short status report.
+24. Return `result: stop` if the sprint format is invalid, the target branch is missing, the checkout or pull fails, the feature branch cannot be created, the PR creation fails, or the Jira comment cannot be posted.
 
 ## Output
 
@@ -94,7 +102,9 @@ If the sprint branch is missing:
 - Do not overwrite an existing `feat/<JIRA_ID>` branch or an existing PR with the same head branch. Warn and stop instead.
 - Keep the PR body minimal: Jira link and PRD link only.
 - Comment Jira only after the PR is created successfully.
+- Include `PIC`, `QA`, then `CC` in the Jira mention tail.
 - Use `qaRt` as the QA source of truth. Do not infer QA from old Jira comments.
-- Use assignees of linked issues whose `linkType` is `task link` as the CC stakeholder list.
-- Prefer Jira account IDs from the saved snapshot for mentions. Do not fake plain-text `@name` mentions.
-- Keep the Jira handoff comment short: review request, PR link, QA mention, and CC mentions only.
+- Resolve stakeholder `CC` mentions from the merged `issueLinks` snapshot produced by `fetch-jira-issue`.
+- Treat snapshot `issueLinks` as the source of truth for both `task link` filtering and linked issue assignee data in this step.
+- Do not fake plain-text `@name` mentions such as `PIC: @Minh Tin Trieu`.
+- Keep the Jira handoff comment short: review request, PR link, and a mention tail with `PIC`, `QA`, and `CC` only.

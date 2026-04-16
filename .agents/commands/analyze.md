@@ -14,6 +14,6 @@ Run the phase 1 flow through canonical skills.
 2. If step 1 returns `result: continue`, run `.agents/skills/analyze/fetch-jira-issue/SKILL.md` with the same Jira URL.
 3. If step 2 returns `result: continue`, run `.agents/skills/analyze/fetch-confluence/SKILL.md`.
 4. If step 3 returns `result: continue`, run `.agents/skills/generate-master-spec/SKILL.md` with the same Jira ID.
-5. If step 4 returns `result: continue`, run `.agents/skills/finalize-master-spec/SKILL.md` with the same Jira ID.
+5. If step 4 returns `result: continue`, run `.agents/skills/analyze/finalize-master-spec/SKILL.md` with the same Jira ID.
 
 If any step returns `result: stop`, stop the flow.
