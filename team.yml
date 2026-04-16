@@ -5,4 +5,20 @@ team:
   - name: "Tin Trieu Minh"
     github: "minhtintrieu-ct"
     role: fe
-    jira_account_id: "627cdcaef29dcb0068f96a14"
+    jira_account_id: "712020:343b69ba-8636-4519-b639-a6b3b3cd5927"
+
+  - name: "Vo Ngoc Tin"
+    github: "tinvo-ct"
+    role: fe
+    jira_account_id: "62a6b1c9979e6e006903e0de"
+
+  - name: "Tran Tri Thuc"
+    github: "thuctran-ct"
+    role: fe
+    jira_account_id: "712020:b87f9b2b-a083-415f-a2a9-985add7eb320"
+
+  # QE/QC Engineers
+  - name: "Pham Thi Ngoc Anh"
+    github: "anhpham-ct"
+    role: qe
+    jira_account_id: "712020:3d3bb213-a26c-4405-904a-89795ef68c59"

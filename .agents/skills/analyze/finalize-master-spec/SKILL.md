@@ -7,7 +7,7 @@ description: Optionally create a sprint PR after `master-spec.md` is ready. Use 
 
 Optionally create the sprint PR after the package is ready.
 
-Keep this step focused on the user decision, git branching, PR creation, and Jira handoff comment.
+Keep this step focused on the user decision, git branching, PR creation, GitHub reviewer requests, and Jira handoff comment.
 
 ## Workflow
 
@@ -16,6 +16,7 @@ Keep this step focused on the user decision, git branching, PR creation, and Jir
    - `temp/<JIRA_ID>/jira-issue.json`
    - `temp/<JIRA_ID>/prd-source.json`
    - `features/<JIRA_ID>/master-spec.md`
+   - `team.yml`
 3. Compute the current sprint in ISO `year.week` format using the local date, for example `26.16`.
 4. Ask the user one concise question:
    - `yes`: create a PR into `spec/<current sprint>`
@@ -42,24 +43,33 @@ Keep this step focused on the user decision, git branching, PR creation, and Jir
    - base: `spec/<sprint>`
    - head: `feat/<JIRA_ID>`
    - body: Jira link, then PRD link
-18. Build one Jira comment on the root story that includes:
+18. Resolve GitHub reviewer candidates from `temp/<JIRA_ID>/jira-issue.json`:
+   - include the root story assignee
+   - include `qaRt`
+   - include all linked issue assignees from `issueLinks`
+   - dedupe candidates by Jira account ID
+19. Resolve reviewer GitHub usernames from `team.yml`:
+   - match `jira_account_id` from `team.yml` against the deduped Jira account IDs
+   - keep only entries that expose a non-empty `github` username
+   - request review from all resolved GitHub usernames, including the root assignee when present
+20. Build one Jira comment on the root story that includes:
    - a short review request
    - the created PR link
-19. Resolve Jira mention recipients from `temp/<JIRA_ID>/jira-issue.json`:
+21. Resolve Jira mention recipients from `temp/<JIRA_ID>/jira-issue.json`:
    - `PIC` from the root story assignee
    - `QA` from `qaRt`
    - `CC` from stakeholders resolved from `issueLinks`
-20. Filter stakeholder recipients from `issueLinks`:
+22. Filter stakeholder recipients from `issueLinks`:
    - keep only snapshot `issueLinks` whose `linkType` is `task link`
    - use the saved linked issue assignee account IDs and display names from the merged snapshot
    - dedupe recipients by account ID
-21. Build the mention tail in this order:
+23. Build the mention tail in this order:
    - `PIC`
    - `QA`
    - `CC`
-22. Post exactly one Jira comment on the root story using Jira Cloud ADF mention nodes, not plain-text `@name`.
-23. Return a short status report.
-24. Return `result: stop` if the sprint format is invalid, the target branch is missing, the checkout or pull fails, the feature branch cannot be created, the PR creation fails, or the Jira comment cannot be posted.
+24. Post exactly one Jira comment on the root story using Jira Cloud ADF mention nodes, not plain-text `@name`.
+25. Return a short status report.
+26. Return `result: stop` if the sprint format is invalid, the target branch is missing, the checkout or pull fails, the feature branch cannot be created, the PR creation fails, the reviewer request fails, or the Jira comment cannot be posted.
 
 ## Output
 
@@ -79,6 +89,7 @@ If the PR is created:
 - target-branch: spec/26.16
 - feature-branch: feat/PLMO-1328
 - pr: created
+- reviewers: requested
 - jira-comment: posted
 - result: continue
 ```
@@ -101,6 +112,10 @@ If the sprint branch is missing:
 - Pull the latest `spec/<sprint>` code before creating `feat/<JIRA_ID>`.
 - Do not overwrite an existing `feat/<JIRA_ID>` branch or an existing PR with the same head branch. Warn and stop instead.
 - Keep the PR body minimal: Jira link and PRD link only.
+- Resolve GitHub reviewers from `team.yml`, not from free-text names.
+- Request review from all mapped stakeholders found in the ticket snapshot: root assignee, `qaRt`, and linked issue assignees.
+- Dedupe GitHub reviewers by username before requesting review.
+- If a Jira stakeholder cannot be mapped through `team.yml`, skip that reviewer silently and continue with the mapped reviewers.
 - Comment Jira only after the PR is created successfully.
 - Include `PIC`, `QA`, then `CC` in the Jira mention tail.
 - Use `qaRt` as the QA source of truth. Do not infer QA from old Jira comments.
