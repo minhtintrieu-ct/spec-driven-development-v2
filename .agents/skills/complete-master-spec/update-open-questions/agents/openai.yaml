@@ -1,0 +1,4 @@
+interface:
+  display_name: "Update Open Questions"
+  short_description: "Resolve answers and skip non-blocking gaps"
+  default_prompt: "Use $update-open-questions to apply incoming answers into open-questions.md and mark unanswered non-blocking items as Skipped."

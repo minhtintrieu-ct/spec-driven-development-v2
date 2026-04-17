@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ship Explore Working Repo"
+  short_description: "Confirm touch points and repo constraints"
+  default_prompt: "Use $ship-explore-working-repo after $ship-fetch-kh-context to verify KH hints against code and write .planning/<feature>/repo-exploration.md."

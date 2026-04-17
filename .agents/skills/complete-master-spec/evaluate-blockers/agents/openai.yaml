@@ -1,0 +1,4 @@
+interface:
+  display_name: "Evaluate Blockers"
+  short_description: "Check blocking answers before completion"
+  default_prompt: "Use $evaluate-blockers to verify which blocking open questions or Figma gaps are still unresolved before the completion flow continues."

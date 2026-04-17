@@ -78,6 +78,9 @@ Current supported input:
 
 `qc` is the only supported platform that runs directly in the spec repo. The other platforms must run in a working repo.
 QC artifacts are written under `TCs/<JIRA_ID>/` in the spec repo.
+For non-`qc` platforms, the working-repo handoff helper prepares a disposable `.planning/<feature>/` bundle in the current working repo. If the selected feature name is the Jira ID, the bundle path becomes `.planning/<JIRA_ID>/`.
+In this repo's current migration state, do not use the legacy helper under `~/.platform-spec/` for `ship`; it may still point to `ct-common-platform-specs` instead of the registered spec repo.
+Because `.planning/` is generated in the working repo, ignore it in the working repo's `.gitignore`, not in this spec repo by default.
 
 For every non-`qc` platform, the first `ship` run in a working repo must provide that repo's `dev base branch`. `ship` then reuses the stored value from `~/.config/platform-spec/platform-spec.yml` under `working_repos`.
 

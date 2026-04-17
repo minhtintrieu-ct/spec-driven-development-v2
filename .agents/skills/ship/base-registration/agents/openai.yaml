@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ship Base Registration"
+  short_description: "Register working repo and base branch"
+  default_prompt: "Use $ship-base-registration after $ship-resolve-base to persist or refresh the current working repo registration and reusable dev_base_branch."

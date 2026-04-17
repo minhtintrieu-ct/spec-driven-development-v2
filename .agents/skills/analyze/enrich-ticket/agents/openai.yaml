@@ -1,4 +1,0 @@
-interface:
-  display_name: "Enrich Ticket"
-  short_description: "Enrich a Jira ticket with context"
-  default_prompt: "Use $enrich-ticket to enrich a Jira ticket with linked context, references, and clearer working notes."

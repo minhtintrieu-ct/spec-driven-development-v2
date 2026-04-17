@@ -22,7 +22,12 @@ Optional on the first run for this repo:
 
 ## Workflow
 
-1. Use `base/SKILL.md` to resolve shared config, classify the current repo, and apply shared stop conditions.
+1. Use `base/SKILL.md` to run the shared ship baseline:
+   - `resolve-base/SKILL.md`
+   - `base-registration/SKILL.md` for non-`qc` platforms
+   - `repo-sync-baseline/SKILL.md` for non-`qc` platforms
+   - `fetch-kh-context/SKILL.md` for non-`qc` platforms
+   - `explore-working-repo/SKILL.md` for non-`qc` platforms
 2. Route by `platform`.
 3. If `platform = web`, read `web/SKILL.md`.
 4. If `platform = android`, read `android/SKILL.md`.

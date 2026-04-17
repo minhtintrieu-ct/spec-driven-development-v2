@@ -32,9 +32,9 @@ Use them as the carried contract from the older backend platform layer. Do not r
 2. Treat the current working repo as the handoff target by default.
 3. If the backend delta is missing or stale, route through the canonical `generate-backend-delta` flow first in the spec repo.
 4. Do not hand-author `backend-delta.md` inline from the working-repo flow.
-5. Prepare the implementation bundle with the machine helper in the current working repo:
-   - `~/.platform-spec/bin/run-platform-spec-cli.sh prepare-implementation --feature <feature> --platform backend`
-6. Only add `--base-branch <branch>` when the repo has not been registered yet or auto-detect cannot safely choose one.
+5. Treat the target handoff output as `.planning/<feature>/` in the current working repo.
+6. Do not call the legacy global helper under `~/.platform-spec/bin/run-platform-spec-cli.sh` from this repo's ship flow; it may still point to another spec repo.
+7. If this repo does not yet own a canonical bundle-preparation path for backend, stop after confirming the package and delta are ready and tell the user the working-repo bundle still needs the repo-local migration.
 
 ## Guardrails
 
@@ -42,6 +42,8 @@ Use them as the carried contract from the older backend platform layer. Do not r
 - require `platform = backend`
 - stop if the current repo root matches `spec_repo.path`; backend shipping must run in a working repo, not in the spec repo
 - keep the reusable backend delta in the spec repo
+- treat `.planning/<feature>/` as the disposable working-repo handoff bundle for backend
+- stop instead of calling the legacy `~/.platform-spec` helper from this repo's ship flow
 - do not implement service code from the spec repo
 - do not invent a `generate-backend-delta` skill
 - do not hand-write `backend-delta.md` as an ad-hoc substitute for `generate-backend-delta`

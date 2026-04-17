@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ship Resolve Base"
+  short_description: "Resolve repo role and shared ship context"
+  default_prompt: "Use $ship-resolve-base first in a ship flow to resolve spec_repo.path, current_repo_root, repo_role, and the matching working-repo entry."

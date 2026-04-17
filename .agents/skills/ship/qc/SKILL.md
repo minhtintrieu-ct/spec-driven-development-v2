@@ -37,6 +37,7 @@ Use them as the carried contract from the older QC platform layer. Do not restat
 - require the current repo root to match `spec_repo.path`; QC must run in the spec repo
 - keep the reusable QC delta in the spec repo
 - write QC artifacts under `TCs/<JIRA_ID>/`; do not write them into `.planning/` or a working repo
+- do not treat QC output as a `.planning/<feature>/` handoff bundle
 - treat QC as manual-quality planning, not automation implementation
 - do not prepare `.planning/<feature>/` handoff bundles for QC
 - do not invent a `generate-qc-delta` skill

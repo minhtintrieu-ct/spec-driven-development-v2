@@ -33,9 +33,9 @@ Use them as the carried contract from the older QE platform layer. Do not restat
 3. If the QE delta is missing or stale, route through the canonical `generate-qe-delta` flow first in the spec repo.
 4. Do not hand-author `qe-delta.md` inline from the working-repo flow.
 5. Keep the resulting QE delta automation-repo-aware before preparing the bundle.
-6. Prepare the implementation bundle with the machine helper in the current working repo:
-   - `~/.platform-spec/bin/run-platform-spec-cli.sh prepare-implementation --feature <feature> --platform qe`
-7. Only add `--base-branch <branch>` when the repo has not been registered yet or auto-detect cannot safely choose one.
+6. Treat the target handoff output as `.planning/<feature>/` in the current working repo.
+7. Do not call the legacy global helper under `~/.platform-spec/bin/run-platform-spec-cli.sh` from this repo's ship flow; it may still point to another spec repo.
+8. If this repo does not yet own a canonical bundle-preparation path for QE, stop after confirming the package and delta are ready and tell the user the working-repo bundle still needs the repo-local migration.
 
 ## Guardrails
 
@@ -43,6 +43,8 @@ Use them as the carried contract from the older QE platform layer. Do not restat
 - require `platform = qe`
 - stop if the current repo root matches `spec_repo.path`; QE shipping must run in a working repo, not in the spec repo
 - keep the reusable QE delta in the spec repo
+- treat `.planning/<feature>/` as the disposable working-repo handoff bundle for QE
+- stop instead of calling the legacy `~/.platform-spec` helper from this repo's ship flow
 - do not implement automation code from the spec repo
 - do not hand off a QE delta that hides missing fixtures, environments, or automation scope gaps
 - do not invent a `generate-qe-delta` skill

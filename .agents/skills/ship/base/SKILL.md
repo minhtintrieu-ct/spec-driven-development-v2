@@ -5,39 +5,31 @@ description: Shared baseline for all `ship/*` platform skills. Use this for comm
 
 # Ship Base
 
-Use this skill as the shared baseline for every platform under `ship/`.
-
-Use it to centralize common preflight, repo-role classification, and generic stop conditions before applying platform-specific logic.
+Use this skill as the thin orchestrator for the shared `ship` baseline.
 
 Do not use this as a standalone platform entrypoint.
 
-## Shared Preflight
+## Execution Flow
 
-1. Read `~/.config/platform-spec/platform-spec.yml`.
-2. Resolve `spec_repo.path`.
-3. Resolve the current repo root.
-4. Classify the current repo:
-   - if current repo root matches `spec_repo.path`, it is the spec repo
-   - otherwise, it is a working repo
-5. If the current repo is a working repo, look up `working_repos[<current-repo-root>]` from the shared config.
-6. Require the selected platform skill to use this classification before doing platform-specific work.
+1. Run `resolve-base/SKILL.md` first.
+2. If `platform != qc`, run `base-registration/SKILL.md` next.
+3. If `platform != qc`, run `repo-sync-baseline/SKILL.md` after registration succeeds.
+4. If `platform != qc`, run `fetch-kh-context/SKILL.md` after repo sync baseline succeeds.
+5. If `platform != qc`, run `explore-working-repo/SKILL.md` after KH context succeeds.
+6. Pass the normalized shared context, registration result, repo-sync result, KH search brief, and repo exploration brief down to the later ship phases.
 
 ## Shared Repo Guardrails
 
 - All non-`qc` platforms must run in a working repo.
 - `qc` is the only platform allowed to run directly in the spec repo.
-- Always use the registered `spec_repo.path`; do not guess a spec repo from the current working directory.
-- If `~/.config/platform-spec/platform-spec.yml` is missing, incomplete, or points to a missing repo, return `result: stop`.
-- If the selected platform skill does not exist yet in the registered spec repo, return `result: stop`.
-- For every non-`qc` platform, require a working-repo registration entry under `working_repos[<current-repo-root>]`.
-- On the first `ship` run for a working repo, require an explicit `dev base branch`, then persist it into `working_repos[<current-repo-root>].dev_base_branch` for reuse.
-- On later `ship` runs for the same working repo, reuse the stored `dev_base_branch` unless the repo has materially changed and the registration must be refreshed.
-- If a working repo entry exists but lacks `dev_base_branch`, return `result: stop`.
+- Treat `resolve-base/SKILL.md` as the canonical place for shared config resolution and repo-role classification.
+- Treat `base-registration/SKILL.md` as the canonical place for working-repo registration.
+- Treat `repo-sync-baseline/SKILL.md` as the canonical place for repo sync baseline.
+- Treat `fetch-kh-context/SKILL.md` as the canonical place for KH-assisted search-space reduction before later ship phases continue.
+- Treat `explore-working-repo/SKILL.md` as the canonical place for confirming real code touch points before later ship phases continue.
 
 ## Shared Delivery Rules
 
-- Keep reusable platform deltas in the spec repo.
-- Do not implement product code from the spec repo for non-`qc` platforms.
-- Reuse the approved package from the registered spec repo instead of regenerating shared package artifacts inline from the working repo flow.
-- Treat `working_repos[<current-repo-root>].dev_base_branch` as the canonical reusable base branch for that working repo once it has been registered.
-- Let platform-specific skills add only their own delta rules on top of this base.
+- Keep this skill thin.
+- Stop at the first shared step that returns `result: stop`.
+- Let later phases add KH, repo exploration, delta, and handoff rules separately.

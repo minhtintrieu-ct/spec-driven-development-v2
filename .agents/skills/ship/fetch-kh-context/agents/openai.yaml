@@ -1,0 +1,5 @@
+interface:
+  display_name: "Ship Fetch KH Context"
+  short_description: "Reduce repo exploration scope with KH hints"
+  default_prompt: |
+    Use $ship-fetch-kh-context after $ship-repo-sync-baseline to turn the approved package into a Knowledge Hub-assisted search brief before exploring the working repo.

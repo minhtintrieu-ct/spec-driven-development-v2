@@ -1,0 +1,1010 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ship Artifact Chain</title>
+    <style>
+      :root {
+        --bg: #f5f1e8;
+        --panel: rgba(255, 252, 246, 0.92);
+        --panel-strong: #fffaf0;
+        --ink: #1d2430;
+        --muted: #5f6572;
+        --line: #d9d0c1;
+        --accent: #0f766e;
+        --accent-soft: rgba(15, 118, 110, 0.12);
+        --accent-strong: #0b5e57;
+        --warn: #92400e;
+        --shadow: 0 18px 42px rgba(35, 33, 25, 0.08);
+        --radius: 20px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(15, 118, 110, 0.1),
+            transparent 30%
+          ),
+          radial-gradient(
+            circle at top right,
+            rgba(146, 64, 14, 0.1),
+            transparent 26%
+          ),
+          linear-gradient(180deg, #f7f4ec 0%, var(--bg) 100%);
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+        line-height: 1.6;
+      }
+
+      .page {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 40px 20px 80px;
+      }
+
+      .hero {
+        padding: 36px;
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        border-radius: 28px;
+        background: linear-gradient(
+          145deg,
+          rgba(255, 250, 240, 0.92),
+          rgba(250, 246, 238, 0.72)
+        );
+        box-shadow: var(--shadow);
+      }
+
+      .hero-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .lang-toggle {
+        display: inline-flex;
+        padding: 4px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.65);
+      }
+
+      .lang-toggle button {
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        padding: 8px 14px;
+        border-radius: 999px;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .lang-toggle button.active {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        font-family: "Iowan Old Style", "Palatino Linotype", serif;
+        line-height: 1.15;
+      }
+
+      h1 {
+        margin-top: 16px;
+        font-size: clamp(2.4rem, 4vw, 4rem);
+      }
+
+      h2 {
+        font-size: clamp(1.6rem, 2.2vw, 2.2rem);
+      }
+
+      h3 {
+        font-size: 1.2rem;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      .lede {
+        max-width: 850px;
+        margin-top: 18px;
+        font-size: 1.05rem;
+        color: var(--muted);
+      }
+
+      .hero-grid,
+      .grid,
+      .platform-grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      .hero-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        margin-top: 28px;
+      }
+
+      .stat,
+      .card,
+      .platform-card,
+      .note {
+        padding: 20px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+
+      .stat strong {
+        display: block;
+        font-size: 1.8rem;
+        line-height: 1;
+      }
+
+      .stat span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+      }
+
+      section {
+        margin-top: 28px;
+      }
+
+      .section-head {
+        margin-bottom: 16px;
+      }
+
+      .section-head p {
+        margin-top: 8px;
+        max-width: 800px;
+        color: var(--muted);
+      }
+
+      .grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+
+      .card {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card::after {
+        content: "";
+        position: absolute;
+        inset: auto -18px -18px auto;
+        width: 88px;
+        height: 88px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+      }
+
+      .step {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 700;
+      }
+
+      .card p {
+        margin-top: 8px;
+        color: var(--muted);
+      }
+
+      .mini-title {
+        margin-top: 14px;
+        font-size: 0.84rem;
+        font-weight: 800;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: var(--accent-strong);
+      }
+
+      ul {
+        margin: 10px 0 0;
+        padding-left: 18px;
+      }
+
+      li + li {
+        margin-top: 4px;
+      }
+
+      .chain {
+        padding: 22px;
+        border-radius: 24px;
+        border: 1px solid var(--line);
+        background: linear-gradient(
+          160deg,
+          rgba(255, 250, 240, 0.95),
+          rgba(244, 248, 247, 0.92)
+        );
+        box-shadow: var(--shadow);
+      }
+
+      .chain-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .chain-box {
+        padding: 16px;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: var(--panel-strong);
+      }
+
+      .chain-box strong {
+        display: block;
+        font-size: 0.95rem;
+      }
+
+      .chain-box span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 0.96rem;
+      }
+
+      .note {
+        border-left: 5px solid var(--accent);
+      }
+
+      .note.warn {
+        border-left-color: var(--warn);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 248, 239, 0.96),
+          rgba(255, 252, 247, 0.9)
+        );
+      }
+
+      .note p + p {
+        margin-top: 8px;
+      }
+
+      .platform-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      }
+
+      .platform-card h3 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 10px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+
+      .platform-card p {
+        margin-top: 10px;
+        color: var(--muted);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+      }
+
+      th,
+      td {
+        padding: 14px 16px;
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid var(--line);
+      }
+
+      th {
+        background: rgba(15, 118, 110, 0.1);
+        font-size: 0.86rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: var(--accent-strong);
+      }
+
+      td {
+        background: rgba(255, 252, 246, 0.94);
+      }
+
+      code {
+        padding: 2px 6px;
+        border-radius: 8px;
+        background: rgba(29, 36, 48, 0.07);
+        font-family: "SFMono-Regular", "Consolas", monospace;
+        font-size: 0.92em;
+      }
+
+      .footer {
+        margin-top: 28px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      @media (max-width: 860px) {
+        .chain-row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <div class="hero-top">
+          <span class="eyebrow" data-i18n="eyebrow">Ship Docs</span>
+          <div class="lang-toggle" aria-label="Language toggle">
+            <button type="button" class="active" data-lang="vi">VI</button>
+            <button type="button" data-lang="en">EN</button>
+          </div>
+        </div>
+
+        <h1 data-i18n="hero_title">Chuỗi artifact trước khi implement</h1>
+        <p class="lede" data-i18n="hero_lede">
+          Tài liệu này giải thích mối quan hệ giữa <code>package</code>,
+          <code>kh-search-brief</code>, <code>repo-exploration</code>, và
+          <code>delta</code>. Mục tiêu là giúp người đọc hiểu rõ mỗi artifact
+          dùng để làm gì, và giúp các phase sau không phải đi khám phá lại repo
+          từ đầu.
+        </p>
+
+        <div class="hero-grid">
+          <article class="stat">
+            <strong>4</strong>
+            <span data-i18n="stat_1"
+              >Artifact cốt lõi trong chuỗi chuẩn bị của ship</span
+            >
+          </article>
+          <article class="stat">
+            <strong>1</strong>
+            <span data-i18n="stat_2"
+              >Source of truth ở mỗi phase, với code thắng khi tới lúc verify
+              repo reality</span
+            >
+          </article>
+          <article class="stat">
+            <strong>6</strong>
+            <span data-i18n="stat_3"
+              >Đầu ra platform cần chuẩn bị: web, android, ios, backend, qe,
+              qc</span
+            >
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2 data-i18n="short_title">Phiên bản ngắn gọn</h2>
+          <p data-i18n="short_desc">
+            Đọc phần này nếu chỉ cần mental model nhanh.
+          </p>
+        </div>
+
+        <div class="chain">
+          <div class="chain-row">
+            <div class="chain-box">
+              <strong>master-spec</strong>
+              <span data-i18n="chain_package">Cần build cái gì</span>
+            </div>
+            <div class="chain-box">
+              <strong>kh-search-brief</strong>
+              <span data-i18n="chain_kh">Nên tìm ở đâu trước trong repo</span>
+            </div>
+            <div class="chain-box">
+              <strong>repo-exploration</strong>
+              <span data-i18n="chain_repo"
+                >Code hiện tại thực sự đang thế nào</span
+              >
+            </div>
+            <div class="chain-box">
+              <strong>delta</strong>
+              <span data-i18n="chain_delta"
+                >Platform này nên implement ra sao</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2 data-i18n="precision_title">Cùng ý đó, nhưng rõ nghĩa hơn</h2>
+          <p data-i18n="precision_desc">
+            Đây là bộ định nghĩa nên thống nhất khi nói về flow.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <div class="step">1</div>
+            <h3>package</h3>
+            <p data-i18n="pkg_desc">Scope và quyết định sản phẩm.</p>
+            <div class="mini-title" data-i18n="mini_inputs">
+              Đầu vào thường gặp
+            </div>
+            <ul data-i18n-html="pkg_list"></ul>
+          </article>
+
+          <article class="card">
+            <div class="step">2</div>
+            <h3>kh-search-brief</h3>
+            <p data-i18n="kh_desc">Search-space reduction hints.</p>
+            <div class="mini-title" data-i18n="mini_contains">Nên chứa gì</div>
+            <ul data-i18n-html="kh_list"></ul>
+          </article>
+
+          <article class="card">
+            <div class="step">3</div>
+            <h3>repo-exploration</h3>
+            <p data-i18n="repo_desc">Verified repo reality.</p>
+            <div class="mini-title" data-i18n="mini_confirm">
+              Nên xác nhận gì
+            </div>
+            <ul data-i18n-html="repo_list"></ul>
+          </article>
+
+          <article class="card">
+            <div class="step">4</div>
+            <h3>delta</h3>
+            <p data-i18n="delta_desc">
+              Platform-specific implementation contract.
+            </p>
+            <div class="mini-title" data-i18n="mini_enable">Nên enable gì</div>
+            <ul data-i18n-html="delta_list"></ul>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2 data-i18n="chain_title">Hãy xem nó như một cái chain</h2>
+          <p data-i18n="chain_desc">
+            Mỗi artifact nên làm bước sau hẹp lại. Không artifact nào nên copy
+            lại toàn bộ bước trước.
+          </p>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="table_h1">Artifact</th>
+              <th data-i18n="table_h2">Câu hỏi chính nó trả lời</th>
+              <th data-i18n="table_h3">Bước tiếp theo dùng nó để làm gì</th>
+            </tr>
+          </thead>
+          <tbody data-i18n-html="table_rows"></tbody>
+        </table>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2 data-i18n="delta_purpose_title">
+            Delta thực sự sinh ra để làm gì
+          </h2>
+          <p data-i18n="delta_purpose_desc">
+            Delta không phải PRD thứ hai. Nó là lớp dịch giữa approved scope và
+            code thực tế của platform.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="note">
+            <h3 data-i18n="delta_should_title">Delta nên làm</h3>
+            <ul data-i18n-html="delta_should_list"></ul>
+          </article>
+
+          <article class="note warn">
+            <h3 data-i18n="delta_not_title">Delta không nên làm</h3>
+            <ul data-i18n-html="delta_not_list"></ul>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2 data-i18n="platform_title">Chi tiết delta theo từng platform</h2>
+          <p data-i18n="platform_desc">
+            Đây là checklist human-friendly cho những gì mỗi platform delta
+            thường nên chứa.
+          </p>
+        </div>
+
+        <div class="platform-grid">
+          <article class="platform-card">
+            <h3>
+              Web <span class="badge" data-i18n="web_badge">UI + flow</span>
+            </h3>
+            <p data-i18n="web_desc">
+              Web delta nên biến feature đã approve thành một kế hoạch UI và
+              state bám sát working repo web.
+            </p>
+            <ul data-i18n-html="web_list"></ul>
+          </article>
+
+          <article class="platform-card">
+            <h3>
+              Android
+              <span class="badge" data-i18n="android_badge"
+                >screen + architecture</span
+              >
+            </h3>
+            <p data-i18n="android_desc">
+              Android delta nên giải thích feature gắn vào app architecture,
+              navigation và state layers hiện tại như thế nào.
+            </p>
+            <ul data-i18n-html="android_list"></ul>
+          </article>
+
+          <article class="platform-card">
+            <h3>
+              iOS
+              <span class="badge" data-i18n="ios_badge"
+                >screen + ownership</span
+              >
+            </h3>
+            <p data-i18n="ios_desc">
+              iOS delta nên nối feature với đúng ownership boundary trong app.
+            </p>
+            <ul data-i18n-html="ios_list"></ul>
+          </article>
+
+          <article class="platform-card">
+            <h3>
+              Backend
+              <span class="badge" data-i18n="backend_badge"
+                >contract + behavior</span
+              >
+            </h3>
+            <p data-i18n="backend_desc">
+              Backend delta nên mô tả thay đổi hành vi phía server, không chỉ
+              liệt kê endpoint.
+            </p>
+            <ul data-i18n-html="backend_list"></ul>
+          </article>
+
+          <article class="platform-card">
+            <h3>
+              QE
+              <span class="badge" data-i18n="qe_badge">automation scope</span>
+            </h3>
+            <p data-i18n="qe_desc">
+              QE delta nên chỉ rõ automation nào cần thêm hoặc sửa, và
+              automation repo đang có constraint gì.
+            </p>
+            <ul data-i18n-html="qe_list"></ul>
+          </article>
+
+          <article class="platform-card">
+            <h3>
+              QC <span class="badge" data-i18n="qc_badge">manual quality</span>
+            </h3>
+            <p data-i18n="qc_desc">
+              QC delta nên là manual-quality planning trong spec repo, không
+              phải working-repo implementation handoff.
+            </p>
+            <ul data-i18n-html="qc_list"></ul>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2 data-i18n="good_delta_title">
+            Một delta tốt thường trả lời được những câu hỏi này
+          </h2>
+          <p data-i18n="good_delta_desc">
+            Nếu implementer vẫn phải tự đi tìm lại toàn bộ những thứ này thì
+            delta vẫn còn yếu.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="note">
+            <h3 data-i18n="q_scope_title">Scope</h3>
+            <ul data-i18n-html="q_scope_list"></ul>
+          </article>
+          <article class="note">
+            <h3 data-i18n="q_touch_title">Touch points</h3>
+            <ul data-i18n-html="q_touch_list"></ul>
+          </article>
+          <article class="note">
+            <h3 data-i18n="q_behavior_title">Behavior</h3>
+            <ul data-i18n-html="q_behavior_list"></ul>
+          </article>
+          <article class="note">
+            <h3 data-i18n="q_risk_title">Risk</h3>
+            <ul data-i18n-html="q_risk_list"></ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="footer">
+        <p data-i18n="footer_text">
+          Quy tắc thực dụng: <code>package</code> định nghĩa scope,
+          <code>kh-search-brief</code> thu hẹp search space,
+          <code>repo-exploration</code> verify reality, còn
+          <code>delta</code> trở thành implementation contract cho platform đó.
+        </p>
+      </section>
+    </main>
+
+    <script>
+      const translations = {
+        vi: {
+          eyebrow: "Ship Docs",
+          hero_title: "Chuỗi artifact trước khi implement",
+          hero_lede:
+            "Tài liệu này giải thích mối quan hệ giữa <code>package</code>, <code>kh-search-brief</code>, <code>repo-exploration</code>, và <code>delta</code>. Mục tiêu là giúp người đọc hiểu rõ mỗi artifact dùng để làm gì, và giúp các phase sau không phải đi khám phá lại repo từ đầu.",
+          stat_1: "Artifact cốt lõi trong chuỗi chuẩn bị của ship",
+          stat_2:
+            "Source of truth ở mỗi phase, với code thắng khi tới lúc verify repo reality",
+          stat_3:
+            "Đầu ra platform cần chuẩn bị: web, android, ios, backend, qe, qc",
+          short_title: "Phiên bản ngắn gọn",
+          short_desc: "Đọc phần này nếu chỉ cần mental model nhanh.",
+          chain_package: "Cần build cái gì",
+          chain_kh: "Nên tìm ở đâu trước trong repo",
+          chain_repo: "Code hiện tại thực sự đang thế nào",
+          chain_delta: "Platform này nên implement ra sao",
+          precision_title: "Cùng ý đó, nhưng rõ nghĩa hơn",
+          precision_desc:
+            "Đây là bộ định nghĩa nên thống nhất khi nói về flow.",
+          pkg_desc: "Scope và quyết định sản phẩm.",
+          mini_inputs: "Đầu vào thường gặp",
+          pkg_list:
+            "<li><code>master-spec.md</code></li><li><code>knowledge.md</code></li><li><code>api-contract.md</code></li>",
+          kh_desc: "Search-space reduction hints.",
+          mini_contains: "Nên chứa gì",
+          kh_list:
+            "<li>candidate modules</li><li>candidate keywords</li><li>candidate touch points</li><li>candidate integrations</li>",
+          repo_desc: "Verified repo reality.",
+          mini_confirm: "Nên xác nhận gì",
+          repo_list:
+            "<li>real touch points</li><li>reusable patterns</li><li>repo constraints</li><li>code vs package conflicts</li>",
+          delta_desc: "Platform-specific implementation contract.",
+          mini_enable: "Nên enable gì",
+          delta_list:
+            "<li>implementation scope rõ ràng</li><li>quyết định đã được ground</li><li>handoff cho implementer</li><li>ít phải rediscover hơn</li>",
+          chain_title: "Hãy xem nó như một cái chain",
+          chain_desc:
+            "Mỗi artifact nên làm bước sau hẹp lại. Không artifact nào nên copy lại toàn bộ bước trước.",
+          table_h1: "Artifact",
+          table_h2: "Câu hỏi chính nó trả lời",
+          table_h3: "Bước tiếp theo dùng nó để làm gì",
+          table_rows:
+            "<tr><td><code>package</code></td><td>Feature cần gì?</td><td>Dùng để tạo KH query và define expected scope.</td></tr>" +
+            "<tr><td><code>kh-search-brief</code></td><td>Nên inspect chỗ nào trước?</td><td>Dùng để drive targeted repo exploration.</td></tr>" +
+            "<tr><td><code>repo-exploration</code></td><td>Code và constraint nào thực sự đang tồn tại?</td><td>Dùng để ground quyết định platform thay vì đoán.</td></tr>" +
+            "<tr><td><code>delta</code></td><td>Platform này nên implement như thế nào?</td><td>Dùng như implementation-facing contract và handoff input.</td></tr>",
+          delta_purpose_title: "Delta thực sự sinh ra để làm gì",
+          delta_purpose_desc:
+            "Delta không phải PRD thứ hai. Nó là lớp dịch giữa approved scope và code thực tế của platform.",
+          delta_should_title: "Delta nên làm",
+          delta_should_list:
+            "<li>dịch package scope sang ngôn ngữ của platform</li>" +
+            "<li>bám vào touch points có thật trong repo</li>" +
+            "<li>thu hẹp implementation scope</li>" +
+            "<li>giữ lại các quyết định mà implementer không nên phải tự suy lại</li>" +
+            "<li>đủ actionable để handoff</li>",
+          delta_not_title: "Delta không nên làm",
+          delta_not_list:
+            "<li>copy lại toàn bộ package</li>" +
+            "<li>dump raw KH output</li>" +
+            "<li>dump raw repo exploration notes</li>" +
+            "<li>làm như repo reality không tồn tại</li>" +
+            "<li>để mơ hồ các lựa chọn implement cốt lõi</li>",
+          platform_title: "Chi tiết delta theo từng platform",
+          platform_desc:
+            "Đây là checklist human-friendly cho những gì mỗi platform delta thường nên chứa.",
+          web_badge: "UI + flow",
+          web_desc:
+            "Web delta nên biến feature đã approve thành một kế hoạch UI và state bám sát working repo web.",
+          web_list:
+            "<li>route, page, layout, hoặc shell bị ảnh hưởng</li>" +
+            "<li>component nào cần reuse, extend, hoặc create</li>" +
+            "<li>state, provider, atom, reducer, hoặc hook wiring</li>" +
+            "<li>API usage và loading, error, empty states</li>" +
+            "<li>khác biệt giữa desktop và msite nếu có</li>" +
+            "<li>tracking, experiment, socket, hoặc local storage constraints</li>" +
+            "<li>hướng design system, nhất là khi kỳ vọng <code>clad-ui</code></li>",
+          android_badge: "screen + architecture",
+          android_desc:
+            "Android delta nên giải thích feature gắn vào app architecture, navigation và state layers hiện tại như thế nào.",
+          android_list:
+            "<li>screen, fragment, activity, hoặc navigation graph entry bị ảnh hưởng</li>" +
+            "<li>ViewModel, use case, repository, hoặc mapper touch points</li>" +
+            "<li>thay đổi ở domain và data layer</li>" +
+            "<li>UI states, feature flags, experiment hoặc analytics hooks</li>" +
+            "<li>API contract usage và model changes</li>" +
+            "<li>caching, persistence, hoặc offline behavior khi liên quan</li>",
+          ios_badge: "screen + ownership",
+          ios_desc:
+            "iOS delta nên nối feature với đúng ownership boundary trong app.",
+          ios_list:
+            "<li>screen, coordinator, view controller, hoặc SwiftUI view bị ảnh hưởng</li>" +
+            "<li>view model, presenter, store, hoặc interactor responsibilities</li>" +
+            "<li>network và model-layer usage</li>" +
+            "<li>state transitions và edge cases</li>" +
+            "<li>tracking, experiment, deep links, hoặc socket concerns</li>" +
+            "<li>reusable native UI patterns đã có trong repo</li>",
+          backend_badge: "contract + behavior",
+          backend_desc:
+            "Backend delta nên mô tả thay đổi hành vi phía server, không chỉ liệt kê endpoint.",
+          backend_list:
+            "<li>API, handler, job, consumer, hoặc service boundary bị ảnh hưởng</li>" +
+            "<li>request và response behavior</li>" +
+            "<li>business rules, validation, và authorization</li>" +
+            "<li>database hoặc storage impact</li>" +
+            "<li>event, queue, webhook, hoặc side effects</li>" +
+            "<li>observability, logging, alerts, idempotency, và rollback concerns</li>",
+          qe_badge: "automation scope",
+          qe_desc:
+            "QE delta nên chỉ rõ automation nào cần thêm hoặc sửa, và automation repo đang có constraint gì.",
+          qe_list:
+            "<li>happy path, sad path, và các vùng regression chính</li>" +
+            "<li>suite, helper, fixture, và environment setup nên reuse</li>" +
+            "<li>automation nên sống ở đâu trong repo</li>" +
+            "<li>cái gì automate được ngay và cái gì vẫn còn manual</li>" +
+            "<li>data setup, mock, stub, hoặc test account requirements</li>" +
+            "<li>những gap cần được giữ visible thay vì che đi</li>",
+          qc_badge: "manual quality",
+          qc_desc:
+            "QC delta nên là manual-quality planning trong spec repo, không phải working-repo implementation handoff.",
+          qc_list:
+            "<li>test scenarios và acceptance paths</li>" +
+            "<li>preconditions, environment, và account setup</li>" +
+            "<li>coverage cross-platform hoặc cross-device khi cần</li>" +
+            "<li>edge cases và business-rule validations</li>" +
+            "<li>risk-focused regression areas</li>" +
+            "<li>output rõ ràng dưới <code>TCs/&lt;JIRA_ID&gt;/</code>, không phải <code>.planning/</code></li>",
+          good_delta_title:
+            "Một delta tốt thường trả lời được những câu hỏi này",
+          good_delta_desc:
+            "Nếu implementer vẫn phải tự đi tìm lại toàn bộ những thứ này thì delta vẫn còn yếu.",
+          q_scope_title: "Scope",
+          q_scope_list:
+            "<li>Platform này in scope những gì?</li><li>Điều gì được xem là out of scope rõ ràng?</li>",
+          q_touch_title: "Touch points",
+          q_touch_list:
+            "<li>Những file, module, screen, hoặc service nào thực sự liên quan?</li><li>Pattern nào nên được reuse?</li>",
+          q_behavior_title: "Behavior",
+          q_behavior_list:
+            "<li>Behavior mới trên platform này nên chạy như thế nào?</li><li>State, edge case, và constraint nào quan trọng?</li>",
+          q_risk_title: "Risk",
+          q_risk_list:
+            "<li>Repo exploration đã phát hiện conflict hoặc gap nào?</li><li>Điều gì cần giữ visible để follow-up thay vì đoán?</li>",
+          footer_text:
+            "Quy tắc thực dụng: <code>package</code> định nghĩa scope, <code>kh-search-brief</code> thu hẹp search space, <code>repo-exploration</code> verify reality, còn <code>delta</code> trở thành implementation contract cho platform đó.",
+        },
+        en: {
+          eyebrow: "Ship Docs",
+          hero_title: "Artifact chain before implementation",
+          hero_lede:
+            "This page explains the relationship between <code>package</code>, <code>kh-search-brief</code>, <code>repo-exploration</code>, and <code>delta</code>. The goal is to help a human understand what each artifact is for, and to keep later phases from rediscovering the repo from scratch.",
+          stat_1: "Core artifacts in the ship preparation chain",
+          stat_2:
+            "One source of truth per phase, with code winning once repo reality is verified",
+          stat_3:
+            "Platform outcomes to prepare for: web, android, ios, backend, qe, qc",
+          short_title: "The short version",
+          short_desc: "Read this if you only need the mental model.",
+          chain_package: "What needs to be built",
+          chain_kh: "Where to look first in the repo",
+          chain_repo: "What the current code actually looks like",
+          chain_delta: "How this platform should implement the change",
+          precision_title: "The same idea, with more precision",
+          precision_desc:
+            "These are the definitions worth aligning on when discussing the flow.",
+          pkg_desc: "Scope and product decisions.",
+          mini_inputs: "Typical inputs",
+          pkg_list:
+            "<li><code>master-spec.md</code></li><li><code>knowledge.md</code></li><li><code>api-contract.md</code> when present</li>",
+          kh_desc: "Search-space reduction hints.",
+          mini_contains: "What it should contain",
+          kh_list:
+            "<li>candidate modules</li><li>candidate keywords</li><li>candidate touch points</li><li>candidate integrations</li>",
+          repo_desc: "Verified repo reality.",
+          mini_confirm: "What it should confirm",
+          repo_list:
+            "<li>real touch points</li><li>reusable patterns</li><li>repo constraints</li><li>code vs package conflicts</li>",
+          delta_desc: "Platform-specific implementation contract.",
+          mini_enable: "What it should enable",
+          delta_list:
+            "<li>clear implementation scope</li><li>grounded decisions</li><li>handoff to the implementer</li><li>less rediscovery work</li>",
+          chain_title: "Think of it as a chain",
+          chain_desc:
+            "Each artifact should narrow the next step. None of them should duplicate the whole previous step.",
+          table_h1: "Artifact",
+          table_h2: "Main question it answers",
+          table_h3: "How the next step uses it",
+          table_rows:
+            "<tr><td><code>package</code></td><td>What does the feature need?</td><td>Use it to form the KH query and define expected scope.</td></tr>" +
+            "<tr><td><code>kh-search-brief</code></td><td>Where should we inspect first?</td><td>Use it to drive targeted repo exploration.</td></tr>" +
+            "<tr><td><code>repo-exploration</code></td><td>What code and constraints really exist?</td><td>Use it to ground platform decisions instead of guessing.</td></tr>" +
+            "<tr><td><code>delta</code></td><td>How should this platform implement the change?</td><td>Use it as the implementation-facing contract and handoff input.</td></tr>",
+          delta_purpose_title: "What delta is really for",
+          delta_purpose_desc:
+            "Delta is not a second PRD. It is the translation layer between approved scope and real platform code.",
+          delta_should_title: "Delta should do",
+          delta_should_list:
+            "<li>translate package scope into platform language</li>" +
+            "<li>stay grounded in real repo touch points</li>" +
+            "<li>narrow implementation scope</li>" +
+            "<li>preserve decisions the implementer should not have to rediscover</li>" +
+            "<li>be actionable enough for handoff</li>",
+          delta_not_title: "Delta should not do",
+          delta_not_list:
+            "<li>copy the whole package again</li>" +
+            "<li>dump raw KH output</li>" +
+            "<li>dump raw repo exploration notes</li>" +
+            "<li>pretend repo reality does not exist</li>" +
+            "<li>leave core implementation choices ambiguous</li>",
+          platform_title: "Delta detail by platform",
+          platform_desc:
+            "This is the human-friendly checklist for what each platform delta should usually contain.",
+          web_badge: "UI + flow",
+          web_desc:
+            "Web delta should turn the approved feature into a UI and state plan grounded in the web working repo.",
+          web_list:
+            "<li>affected routes, pages, layouts, or shells</li>" +
+            "<li>components to reuse, extend, or create</li>" +
+            "<li>state, provider, atom, reducer, or hook wiring</li>" +
+            "<li>API usage and loading, error, empty states</li>" +
+            "<li>desktop vs msite differences when relevant</li>" +
+            "<li>tracking, experiments, sockets, or local storage constraints</li>" +
+            "<li>design-system direction, especially when <code>clad-ui</code> is expected</li>",
+          android_badge: "screen + architecture",
+          android_desc:
+            "Android delta should explain how the feature fits into the current app architecture, navigation, and state layers.",
+          android_list:
+            "<li>affected screens, fragments, activities, or navigation graph entries</li>" +
+            "<li>ViewModel, use case, repository, or mapper touch points</li>" +
+            "<li>domain and data-layer changes</li>" +
+            "<li>UI states, feature flags, experiment or analytics hooks</li>" +
+            "<li>API contract usage and model changes</li>" +
+            "<li>caching, persistence, or offline behavior when relevant</li>",
+          ios_badge: "screen + ownership",
+          ios_desc:
+            "iOS delta should connect the feature to the real ownership boundaries in the app.",
+          ios_list:
+            "<li>affected screens, coordinators, view controllers, or SwiftUI views</li>" +
+            "<li>view model, presenter, store, or interactor responsibilities</li>" +
+            "<li>network and model-layer usage</li>" +
+            "<li>state transitions and edge cases</li>" +
+            "<li>tracking, experiments, deep links, or socket concerns</li>" +
+            "<li>reusable native UI patterns already present in the repo</li>",
+          backend_badge: "contract + behavior",
+          backend_desc:
+            "Backend delta should describe the server-side behavior change, not just endpoint names.",
+          backend_list:
+            "<li>affected APIs, handlers, jobs, consumers, or service boundaries</li>" +
+            "<li>request and response behavior</li>" +
+            "<li>business rules, validation, and authorization</li>" +
+            "<li>database or storage impact</li>" +
+            "<li>events, queues, webhooks, or side effects</li>" +
+            "<li>observability, logging, alerts, idempotency, and rollback concerns</li>",
+          qe_badge: "automation scope",
+          qe_desc:
+            "QE delta should explain what automation should be added or updated, and what constraints the automation repo has.",
+          qe_list:
+            "<li>happy paths, sad paths, and major regression areas</li>" +
+            "<li>existing suites, helpers, fixtures, and environment setup to reuse</li>" +
+            "<li>where automation should live in the repo</li>" +
+            "<li>what can be automated now vs what remains manual</li>" +
+            "<li>data setup, mocks, stubs, or test account requirements</li>" +
+            "<li>gaps that should remain visible instead of being hidden</li>",
+          qc_badge: "manual quality",
+          qc_desc:
+            "QC delta should be manual-quality planning in the spec repo, not a working-repo implementation handoff.",
+          qc_list:
+            "<li>test scenarios and acceptance paths</li>" +
+            "<li>preconditions, environments, and account setup</li>" +
+            "<li>cross-platform or cross-device coverage when needed</li>" +
+            "<li>edge cases and business-rule validations</li>" +
+            "<li>risk-focused regression areas</li>" +
+            "<li>clear output under <code>TCs/&lt;JIRA_ID&gt;/</code>, not under <code>.planning/</code></li>",
+          good_delta_title: "A good delta usually answers these questions",
+          good_delta_desc:
+            "If the implementer still has to rediscover all of this manually, the delta is still too weak.",
+          q_scope_title: "Scope",
+          q_scope_list:
+            "<li>What is in scope for this platform?</li><li>What is explicitly out of scope?</li>",
+          q_touch_title: "Touch points",
+          q_touch_list:
+            "<li>Which files, modules, screens, or services are actually involved?</li><li>Which existing patterns should be reused?</li>",
+          q_behavior_title: "Behavior",
+          q_behavior_list:
+            "<li>How should the new behavior work on this platform?</li><li>What states, edge cases, and constraints matter?</li>",
+          q_risk_title: "Risk",
+          q_risk_list:
+            "<li>What conflicts or gaps did repo exploration find?</li><li>What should stay visible for follow-up instead of being guessed away?</li>",
+          footer_text:
+            "Practical rule: <code>package</code> defines scope, <code>kh-search-brief</code> reduces search space, <code>repo-exploration</code> verifies reality, and <code>delta</code> becomes the implementation contract for that platform.",
+        },
+      };
+
+      function applyLanguage(lang) {
+        const dict = translations[lang];
+        document.documentElement.lang = lang;
+
+        document.querySelectorAll("[data-i18n]").forEach((node) => {
+          const key = node.getAttribute("data-i18n");
+          if (dict[key] !== undefined) node.innerHTML = dict[key];
+        });
+
+        document.querySelectorAll("[data-i18n-html]").forEach((node) => {
+          const key = node.getAttribute("data-i18n-html");
+          if (dict[key] !== undefined) node.innerHTML = dict[key];
+        });
+
+        document.querySelectorAll("[data-lang]").forEach((button) => {
+          button.classList.toggle(
+            "active",
+            button.getAttribute("data-lang") === lang,
+          );
+        });
+      }
+
+      document.querySelectorAll("[data-lang]").forEach((button) => {
+        button.addEventListener("click", () =>
+          applyLanguage(button.getAttribute("data-lang")),
+        );
+      });
+
+      applyLanguage("vi");
+    </script>
+  </body>
+</html>

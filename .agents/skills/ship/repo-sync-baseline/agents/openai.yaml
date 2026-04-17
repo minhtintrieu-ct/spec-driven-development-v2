@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ship Repo Sync Baseline"
+  short_description: "Verify clean repo and base branch sync"
+  default_prompt: "Use $ship-repo-sync-baseline after $ship-base-registration to stop on local changes, switch to dev_base_branch, and verify a valid origin/<dev_base_branch> baseline."

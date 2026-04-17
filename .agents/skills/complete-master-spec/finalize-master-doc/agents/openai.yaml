@@ -1,0 +1,4 @@
+interface:
+  display_name: "Finalize Master Doc"
+  short_description: "Approve package and bump revision if needed"
+  default_prompt: "Use $finalize-master-doc to normalize the package summary, move the master spec to Approved, and bump the revision only when meaning changed."

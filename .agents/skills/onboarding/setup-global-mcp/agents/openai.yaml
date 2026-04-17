@@ -1,0 +1,4 @@
+interface:
+  display_name: "Setup Global MCP"
+  short_description: "Publish repo MCP servers to global configs"
+  default_prompt: "Use $setup-global-mcp during /onboarding to merge the repo's .mcp.json MCP servers into the supported global client configs."

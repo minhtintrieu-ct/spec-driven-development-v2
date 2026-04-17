@@ -1,0 +1,4 @@
+interface:
+  display_name: "Update Artifacts"
+  short_description: "Apply targeted package artifact updates"
+  default_prompt: "Use $update-artifacts to update only the package artifacts directly affected by the validated completion answers and routing hints."

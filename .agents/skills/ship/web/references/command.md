@@ -143,6 +143,15 @@ Implementation guidance for web repos that already use ECS:
 
 - do not restate the shared behavior already defined in `master-spec.md`
 - do not copy `api-contract.md` verbatim
+- treat the web delta as the output of this artifact chain:
+  - `package`: what needs to be built
+  - `kh-search-brief`: where to look first in the working repo
+  - `repo-exploration`: what the current code actually looks like
+  - `web-delta`: how web should implement the change
+- require `.planning/<feature>/kh-search-brief.md` and `.planning/<feature>/repo-exploration.md` as grounding inputs before writing the final web delta
+- use `kh-search-brief` only as scoped hints; do not promote KH hints into facts unless repo exploration confirmed them
+- treat `repo-exploration.md` as the main grounding input for web touch points, reusable patterns, constraints, and conflicts
+- make `web-delta.md` strong enough that implementation AI should start from the delta first and open `repo-exploration.md` or other source artifacts only for narrow detail checks
 - consume all known-platform references from `figma.md`; treat `platform=web` as the canonical web baseline and use `platform=mobile` as supporting context only when useful
 - structure the web delta in two delivery phases:
   - `Msite`, derived from `platform=mobile` baseline references in `figma.md`
@@ -159,6 +168,22 @@ Implementation guidance for web repos that already use ECS:
 - if a baseline already defines framework, routing, state, data fetching, styling, analytics, testing, or naming conventions, do not restate them unless this feature changes or depends on an exception
 - reference Figma frames and node IDs where relevant
 - align with the actual working repo conventions, not hardcoded defaults
+- keep the delta implementation-facing:
+  - narrow scope
+  - preserve web-specific decisions
+  - make likely change areas explicit
+  - leave execution ordering to the later implementation plan
+- when the repo exploration confirmed likely file or module targets, record them explicitly in the delta instead of leaving change surface abstract
+- when reuse / extend / create is known for an important web surface, say it explicitly instead of leaving it as an implied choice
+- when a risk or gap remains, classify its implementation impact clearly:
+  - `Safe`: implementation can continue normally
+  - `Caution`: implementation can continue but should keep the gap visible
+  - `Stop`: implementation should not proceed until the blocker is resolved
+- do not rely on later implementation AI to rediscover hidden boundaries such as:
+  - shared-module ownership
+  - state ownership boundaries
+  - tracking integration constraints
+  - styling or token constraints
 - treat ECS as the canonical web tracking path when the repo already uses it; do not silently switch to GTM-only or custom event wrappers for ECS-scoped events
 - if telemetry items are `Waiting for event`, keep them visible as follow-up work instead of pretending they are implementation-ready
 - read `figma.md` carefully before writing any web-specific visual guidance
@@ -176,6 +201,8 @@ Implementation guidance for web repos that already use ECS:
 - initialize `Delta Status = Draft`
 - set `Generated At`
 - if working repo context is missing or key decisions stay assumed, keep the delta in `Draft`
+- if the delta still requires broad reading of `repo-exploration.md` just to know where to start coding, keep the delta in `Draft`
+- set `Delta Status = Ready` only when the delta is self-sufficient enough for implementation AI to begin coding from the delta itself, using fallback references only for narrow detail checks
 - if baseline or scope resolution is incomplete, say so explicitly in the delta metadata and risks
 - `scan all` is an explicit fallback for baseline creation or refresh, not the default delta path
 - if this delta no longer matches the current package revision, mark `Delta Status = Stale` and fill `Stale Reason`
@@ -187,29 +214,25 @@ The resulting `web-delta.md` should be structured, implementation-oriented, and 
 
 Recommended sections:
 
-- Metadata / scope / baseline
-- Inherited repo baseline when available
-- Architecture overview
-- Delivery phases:
-  - Msite
-  - Desktop
-- Design-system strategy
-- Page structure
-- Component hierarchy and action summary
-- State management strategy
-- Page specifications
-- API integration
-- Routing and navigation
-- SEO / accessibility / responsive requirements
-- Performance constraints
-- Analytics events
-- Open questions / risks
+- Overview
+- Web Scope
+- Verified Repo Reality
+- Design System Strategy
+- Implementation Decisions
+- UI Behavior
+- Change Surface
+- Risks And Gaps
+- Implementation Handoff
 
 ## Success Criteria
 
 - web-specific decisions are explicit
 - repo-aware recommendations are grounded in the actual codebase
+- the delta uses `repo-exploration.md` as verified grounding instead of re-running broad discovery inside the delta itself
 - the delta focuses on feature-specific exceptions rather than repeating the full web repo baseline
+- the likely file and module change surface is explicit enough for implementation AI to know where to start
+- major reuse / extend / create decisions are explicit for the important web surfaces
+- fallback references are narrow and optional, not a substitute for missing delta content
 - full-repo scanning happens only when explicitly chosen as a baseline refresh fallback
 - unresolved design detail is surfaced as explicit follow-up or blocker instead of guessed implementation guidance
 - Msite and Desktop implementation guidance stay clearly separated while sharing one web delta
