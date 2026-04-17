@@ -2,89 +2,134 @@
 
 AI-native platform spec workflow.
 
-## Source of Truth
+## Quick Start
 
-- `.agents/commands` is the canonical command layer.
-- `.agents/skills` is the canonical skill layer.
-- `config.yml` is the canonical shared workflow config.
-- `.claude/commands` and `.claude/skills` should point to `.agents`.
-- `.cursor/commands` and `.cursor/skills` should point to `.agents`.
+1. Open this repo.
+2. Run `/onboarding` once on your machine.
+3. When a new Jira story arrives, run `/analyze <JIRA_URL>`.
+4. When the package is approved and implementation needs to start, go to the target working repo and run `ship`.
+5. When `.planning/<JIRA_ID>/` is ready, run `/implement`.
 
-Client-specific configuration stays in:
+## Commands
 
-- `.claude/settings.json`
-- `.claude/settings.local.json`
-- `.cursor/settings.json`
-- `.cursor/mcp.json`
-- `.mcp.json`
+### `/onboarding`
 
-Shared workflow configuration stays in:
+Use this when setting up a machine for the first time or refreshing shared config.
 
+This command will:
+
+- create or refresh `~/.config/platform-spec/platform-spec.yml`
+- publish the global `ship` skill for Codex, Claude, and Cursor
+- publish the global MCP config
+
+Run this command inside the `spec repo`.
+
+### `/analyze <JIRA_URL>`
+
+Use this to create the initial package for a Jira story.
+
+This command will:
+
+- check the environment
+- fetch the Jira issue
+- fetch the linked Confluence PRD if it exists
+- generate the package under `features/<JIRA_ID>/`
+- finalize the master spec flow
+
+Main outputs:
+
+- `features/<JIRA_ID>/master-spec.md`
+- `features/<JIRA_ID>/knowledge.md`
+- `features/<JIRA_ID>/open-questions.md`
+- `features/<JIRA_ID>/api-contract.md`
+
+### `/complete`
+
+Use this when the package already exists and new information needs to be folded in.
+
+This command will:
+
+- evaluate blockers
+- update open questions
+- update impacted artifacts when needed
+- finalize the master package again
+
+Typical use cases:
+
+- BA answered open questions
+- the PRD changed
+- the API contract or requirements became clearer
+
+### `ship`
+
+Use this to prepare implementation from an approved package.
+
+For `web`, `android`, `ios`, `backend`, and `qe`:
+
+- run it inside the target `working repo`
+- sync to the registered `dev_base_branch`
+- enrich KH context
+- explore the real repo
+- generate the platform delta
+- write artifacts under `.planning/<feature>/`
+
+For `qc`:
+
+- run it inside the `spec repo`
+- do not use `.planning/`
+
+On the first `ship` run in a working repo, provide the `dev base branch`.
+
+### `/implement`
+
+Use this after `.planning/<feature>/` is ready in the `working repo`.
+
+This command checks that these artifacts exist:
+
+- `kh-search-brief.md`
+- `repo-exploration.md`
+- the platform delta
+
+`/implement` supports 2 modes:
+
+- `full`: implement directly from the delta in one pass
+- `multi`: create a plan, implement by phase, and stop after each phase for user review
+
+If `mode` is missing, the command explains the modes briefly and stops so the user can choose.
+
+## Repo Roles
+
+### Spec Repo
+
+This repo is the source of truth for the package and the shared workflow.
+
+It owns:
+
+- `.agents/commands`
+- `.agents/skills`
+- `features/<JIRA_ID>/...`
 - `config.yml`
+- `team.yml`
 
-Device-level shared configuration stays in:
+### Working Repo
+
+This is the real implementation repo for a platform.
+
+Non-`qc` flows create temporary artifacts under:
+
+- `.planning/<feature>/`
+
+Ignore `.planning/` in the `working repo`, not in the `spec repo`.
+
+## Shared Config
+
+The shared device-level config lives at:
 
 - `~/.config/platform-spec/platform-spec.yml`
 
-This shared file stores both:
+This file stores:
 
-- the registered `spec_repo.path` and current user identity
-- per-working-repo registration under `working_repos`, including the reusable `dev_base_branch`
-
-## Phase 1
-
-The first workflow entrypoint is `/analyze`.
-
-## Onboarding
-
-Use `/onboarding` to:
-
-- create or refresh the device-level shared config for this spec repo
-- publish the global `ship` skill for Codex, Claude, and Cursor
-
-`/analyze` expects onboarding to be completed first and will stop if `~/.config/platform-spec/platform-spec.yml` is missing or points to a different repo path.
-
-`/onboarding` publishes the global skill by linking:
-
-- `<spec-repo>/.agents/skills/ship`
-
-into:
-
-- `~/.codex/skills/ship`
-- `~/.claude/skills/ship`
-- `~/.cursor/skills/ship`
-
-## Implementation
-
-Use the `ship` skill to prepare implementation from the platform spec package.
-
-Current supported input:
-
-- `platform = web`
-- `platform = android`
-- `platform = ios`
-- `platform = backend`
-- `platform = qc`
-- `platform = qe`
-
-`ship` routes by `platform` and currently delegates:
-
-- `platform = web` to `.agents/skills/ship/web/SKILL.md`
-- `platform = android` to `.agents/skills/ship/android/SKILL.md`
-- `platform = ios` to `.agents/skills/ship/ios/SKILL.md`
-- `platform = backend` to `.agents/skills/ship/backend/SKILL.md`
-- `platform = qc` to `.agents/skills/ship/qc/SKILL.md`
-- `platform = qe` to `.agents/skills/ship/qe/SKILL.md`
-
-`qc` is the only supported platform that runs directly in the spec repo. The other platforms must run in a working repo.
-QC artifacts are written under `TCs/<JIRA_ID>/` in the spec repo.
-For non-`qc` platforms, the working-repo handoff helper prepares a disposable `.planning/<feature>/` bundle in the current working repo. If the selected feature name is the Jira ID, the bundle path becomes `.planning/<JIRA_ID>/`.
-In this repo's current migration state, do not use the legacy helper under `~/.platform-spec/` for `ship`; it may still point to `ct-common-platform-specs` instead of the registered spec repo.
-Because `.planning/` is generated in the working repo, ignore it in the working repo's `.gitignore`, not in this spec repo by default.
-
-For every non-`qc` platform, the first `ship` run in a working repo must provide that repo's `dev base branch`. `ship` then reuses the stored value from `~/.config/platform-spec/platform-spec.yml` under `working_repos`.
-
-The web flow preserves the carried web command/template contract from the older platform layer through:
-
-- `.agents/skills/ship/web/references/command.md`
-- `.agents/skills/ship/web/references/template.md`
+- `spec_repo.path`
+- the current user identity
+- `working_repos`
+- the reusable `dev_base_branch` for each working repo

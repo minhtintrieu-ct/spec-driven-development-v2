@@ -17,8 +17,83 @@ team:
     role: fe
     jira_account_id: "712020:b87f9b2b-a083-415f-a2a9-985add7eb320"
 
+  - name: "Pham Nguyen Minh Thang"
+    github: "thangphamnguyenminh-ct"
+    role: fe
+    jira_account_id: "712020:5e9d5fa9-949f-44ad-862c-c3d400922cec"
+
+  # IOS Engineers
+  - name: "Hung Nguyen"
+    github: "hungnguyen-ct"
+    role: ios
+    jira_account_id: "6073c4511d2b2500694e07f1"
+
+  - name: "Tran Dinh Vinh Hoang"
+    github: "hoangtran-ct"
+    role: ios
+    jira_account_id: "619b1b82fe9f300068275522"
+
+  # Android Engineers
+  - name: "Le Minh Thoai"
+    github: "thoaile-ct"
+    role: android
+    jira_account_id: "617baf1aa6ecfc007194ad83"
+
+  # Backend Engineers
+  - name: "Pham Phat Dat"
+    github: "datpp-ct"
+    role: backend
+    jira_account_id: "62da270b37366f100e688e1f"
+
+  - name: "Do Quoc Tuan"
+    github: "tuandoquoc-ct"
+    role: backend
+    jira_account_id: "712020:ac04e751-7e62-4251-b920-36b0a30d5ee6"
+
+  - name: "Pham Huu Vinh"
+    github: "vinhphamhuu-ct"
+    role: backend
+    jira_account_id: "712020:d9f574d6-b127-4569-b618-4bf13dbdd711"
+
+  - name: "Tran Bao Nguyen"
+    github: "nguyentranbao-ct"
+    role: backend
+    jira_account_id: "5d92c01ad8794c0d882722b2"
+
+  - name: "Nguyen Dinh Dinh Bao"
+    github: "baonguyen-ct"
+    role: backend
+    jira_account_id: "61cd407d7aa7ac0070e2e802"
+
   # QE/QC Engineers
   - name: "Pham Thi Ngoc Anh"
     github: "anhpham-ct"
-    role: qe
+    role: qc
     jira_account_id: "712020:3d3bb213-a26c-4405-904a-89795ef68c59"
+
+  - name: "Le Thi Ngoc Huong"
+    github: "huongle-ct"
+    role: qc
+    jira_account_id: "61b999f291c049006fbe3d4e"
+
+  - name: "Phuong Thi Thuy Duong"
+    github: "duongphung-ct"
+    role: qc
+    jira_account_id: "6339063a2eaaa5dcfa16021e"
+
+  # Product Manager
+  - name: "Nhung Pham"
+    github: ""
+    role: pm
+    jira_account_id: "712020:90576292-550b-41b8-bede-9cc533b41b97"
+
+  - name: "Doan Le"
+    github: ""
+    role: pm
+    jira_account_id: "712020:e46cacaf-2093-4b23-981e-1d497a9bef5e"
+
+  # Engineer Manager
+  - name: "Tharles Nguyen"
+    github: ""
+    role: pm
+    jira_account_id: "629041681a437e007044041e"

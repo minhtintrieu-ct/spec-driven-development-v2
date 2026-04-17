@@ -1,0 +1,5 @@
+interface:
+  display_name: "Implement Full"
+  short_description: "Implement directly from delta in one pass"
+  default_prompt: |
+    Use $implement-full after /implement selects mode=full to read the prepared platform delta, implement directly from it, and use repo-exploration or KH notes only as narrow fallback references when needed.

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Implement Multi"
+  short_description: "Implement through explicit user-verified phases"
+  default_prompt: |
+    Use $implement-multi after /implement selects mode=multi to create .planning/<feature>/implementation-plan.md, execute one phase at a time from the prepared delta, and pause after each phase for user verification.

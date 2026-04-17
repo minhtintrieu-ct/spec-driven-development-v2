@@ -7,7 +7,7 @@ Use it when you want to understand:
 - where `ship` should be invoked
 - what each shared phase is responsible for
 - what artifacts are produced along the way
-- how package, KH context, repo exploration, and delta relate to each other
+- how package, KH context, repo exploration, delta, and implement relate to each other
 
 ## Short Version
 
@@ -23,6 +23,8 @@ The current shared flow is:
 6. route to the selected platform skill
 
 `qc` is the exception. It runs in the spec repo directly and does not use the working-repo `.planning/` flow.
+
+After `ship` has produced the required planning artifacts and platform delta, the next phase is `/implement`.
 
 ## Where To Run Ship
 
@@ -269,6 +271,7 @@ The easiest way to think about the prep flow is:
 - `kh-search-brief` answers: where to look first in the working repo
 - `repo-exploration` answers: what the current code actually looks like
 - `delta` answers: how the selected platform should implement the change
+- `implement` answers: how to turn the delta into code changes in the working repo
 
 In other words:
 
@@ -276,6 +279,7 @@ In other words:
 2. `kh-search-brief` reduces search space
 3. `repo-exploration` verifies real code touch points
 4. `delta` turns all of that into a platform-specific implementation contract
+5. `implement` turns that platform-specific contract into code changes
 
 ## Artifact Locations
 
@@ -294,6 +298,7 @@ Non-`qc` disposable planning artifacts live under:
 
 - `.planning/<feature>/kh-search-brief.md`
 - `.planning/<feature>/repo-exploration.md`
+- `.planning/<feature>/implementation-plan.md` only when `/implement mode=multi` is used
 
 These are working-repo artifacts, not spec-repo artifacts.
 
@@ -318,6 +323,95 @@ Short version:
 - repo exploration says what code really exists
 - delta says how this platform should implement it
 
+For implementation:
+
+- `delta` should be the primary codegen artifact
+- `repo-exploration.md` and `kh-search-brief.md` should only be reopened for narrow detail checks
+- if implementation AI needs broad rediscovery from those files, the delta is still too weak
+
+## Implement Phase
+
+After `ship` prepares:
+
+- `.planning/<feature>/kh-search-brief.md`
+- `.planning/<feature>/repo-exploration.md`
+- the platform delta
+
+the next entrypoint is:
+
+- `/implement`
+
+The command is intentionally thin:
+
+1. resolve the target feature from `.planning/<feature>/`
+2. resolve `platform` if needed
+3. require `mode = full | multi`
+4. check that these artifacts exist:
+   - `.planning/<feature>/`
+   - `.planning/<feature>/kh-search-brief.md`
+   - `.planning/<feature>/repo-exploration.md`
+   - the platform delta
+5. route to the selected implementation mode skill
+
+The command should not over-validate artifact quality. It should only check existence and let the selected implementation mode decide whether the delta is strong enough to continue.
+
+## Implement Modes
+
+`/implement` currently supports two modes:
+
+- `full`
+- `multi`
+
+### `full`
+
+Use `full` when the delta is already strong enough for direct codegen.
+
+Expected behavior:
+
+1. read the platform delta first
+2. treat the delta as the primary implementation contract
+3. implement directly from the delta in one pass
+4. run relevant verification
+5. return final changed files, verification results, and unresolved risks
+
+Rules:
+
+- do not generate `implementation-plan.md`
+- do not pause for intermediate user confirmation
+- use `repo-exploration.md` and `kh-search-brief.md` only as narrow fallback references
+- do not broaden into full repo rediscovery
+
+### `multi`
+
+Use `multi` when the work should be split into explicit phases with user checkpoints.
+
+Expected behavior:
+
+1. read the platform delta first
+2. create `.planning/<feature>/implementation-plan.md` on the first run
+3. split implementation into explicit phases
+4. execute only the current phase
+5. run verification only for the current phase
+6. stop after that phase for user review
+7. continue to the next phase only when the user explicitly resumes
+
+Resume intent may come from user text such as:
+
+- `continue`
+- `next phase`
+- `continue implement`
+
+After each non-final phase, `multi` should always print one explicit instruction:
+
+- `If you want me to continue to the next phase, reply: continue`
+
+Rules:
+
+- the plan file helps phase execution but does not redefine delta scope
+- `delta` stays the primary implementation contract
+- `repo-exploration.md` and `kh-search-brief.md` stay as fallback references only
+- each run should implement one phase only, then pause
+
 ## Current Migration Constraint
 
 Do not rely on the legacy helper under:
@@ -338,4 +432,5 @@ The intended progression is:
 2. KH brief
 3. repo exploration
 4. delta
+5. implement
 5. implementation
